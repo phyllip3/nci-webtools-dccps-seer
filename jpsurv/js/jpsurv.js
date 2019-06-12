@@ -1621,6 +1621,7 @@ function addSessionVariables() {
 
 function build_parameter_column() {
   set_year_of_diagnosis_select();
+  set_intervals_from_diagnosis();
   set_cohort_select(Object.keys(cohort_covariance_variables));
   var covariate_options = Object.keys(cohort_covariance_variables);
   covariate_options.unshift("None");
@@ -1689,7 +1690,8 @@ jpsurvData.additional.intervals_default = [];
   //
 
 
-  var intervals = getNumberOfIntervals();
+  // var intervals = getNumberOfIntervals();
+    var intervals = jpsurvData.calculate.form.interval;
     var selectedRange = jpsurvData.calculate.form.yearOfDiagnosisRange[1] - jpsurvData.calculate.form.yearOfDiagnosisRange[0];
     $("#interval-years").empty();
     $("#trends-interval-years").empty();
@@ -1849,6 +1851,20 @@ function set_year_of_diagnosis_select() {
   var numberOfOptions = $('select#year_of_diagnosis_end option').length;
   $('#year_of_diagnosis_end option')[numberOfOptions-1].selected = true;
 
+}
+
+function set_intervals_from_diagnosis() {
+  // start interval from 2 
+  for(i=1; i<control_data.VarFormatSecList.Interval.ItemNameInDic.length; i++) {
+    $("#intervals_from_diagnosis").append("<OPTION value=" +
+    control_data.VarFormatSecList.Interval.ItemNameInDic[i] + ">" +
+    control_data.VarFormatSecList.Interval.ItemNameInDic[i] + "=" +
+    control_data.VarFormatSecList.Interval.ItemValueInDic[i] + "</OPTION>");
+  }
+
+  $("#intervals_from_diagnosis").change(function() {
+    jpsurvData.calculate.form.interval = parseInt(this.value);
+  }).change();
 }
 
 function set_cohort_select(cohort_options) {

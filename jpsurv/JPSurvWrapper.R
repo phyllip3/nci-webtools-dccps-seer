@@ -371,6 +371,7 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
   type=jpsurvData$additional$input_type
   varLabels=getCorrectFormat(allVars)
   
+  intervalRange = as.integer(jpsurvData$calculate$form$interval)
   statistic=jpsurvData$additional$DataTypeVariable
   
   subsetStr=getSubsetStr(yearOfDiagnosisVarName, yearOfDiagnosisRange, cohortVars, cohortValues)
@@ -385,7 +386,9 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
                                   newvarnames=varLabels,
                                   NoFit=T,
                                   UseVarLabelsInData=varLabels)
-    fittedResult=joinpoint(seerdata,
+    # get subset of seerdata containing rows within user defined interval range (Intervals from Diagnosis Range)
+    seerdataSub = subset(seerdata, Interval <= intervalRange)
+    fittedResult=joinpoint(seerdataSub,
                            subset = eval(parse(text=subsetStr)),
                            year=getCorrectFormat(yearOfDiagnosisVarName),
                            observedrelsurv=statistic,
