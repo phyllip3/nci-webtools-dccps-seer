@@ -1061,7 +1061,7 @@ function updateEstimates(token_id) {
 }
 
 function updateTrend(token_id) {
-  updateTrendGraph(JSON.parse(jpsurvData.results.CS_AAPC), "trend-apc");
+  // updateTrendGraph(JSON.parse(jpsurvData.results.CS_AAPC), "trend-apc");
   updateTrendGraph(JSON.parse(jpsurvData.results.CS_AAAC), "trend-aac");
   updateTrendGraph(JSON.parse(jpsurvData.results.HAZ_APC), "trend-dap");
 }
@@ -1074,10 +1074,10 @@ function updateTrendGraph(trend, table_id) {
   if(typeof trend["start.year"] == "number") {
     row = "<tr><td>"+trend["start.year"]+"</td>";
     row += "<td>"+trend["end.year"]+"</td>";
-    row += formatCell(trend.estimate);
-    row += formatCell(trend["std.error"])+"</td>";
-    row += formatCell(trend["lowCI"])+"</td>";
-    row += formatCell(trend["upCI"])+"</td>";
+    row += formatCell(trend.estimate*100);
+    row += formatCell(trend["std.error"]*100)+"</td>";
+    row += formatCell(trend["lowCI"]*100)+"</td>";
+    row += formatCell(trend["upCI"]*100)+"</td>";
     var trend_sig=""
     if (trend["lowCI"]>0)
         trend_sig="Increasing"
@@ -1091,10 +1091,10 @@ function updateTrendGraph(trend, table_id) {
     $.each(trend["start.year"], function( index, value ) {
       row = "<tr><td>"+value+"</td>";
       row += "<td>"+trend["end.year"][index]+"</td>";
-      row += formatCell(trend.estimate[index]);
-      row += formatCell(trend["std.error"][index])+"</td>";
-      row += formatCell(trend["lowCI"][index])+"</td>";
-      row += formatCell(trend["upCI"][index])+"</td>";
+      row += formatCell(trend.estimate[index]*100);
+      row += formatCell(trend["std.error"][index]*100)+"</td>";
+      row += formatCell(trend["lowCI"][index]*100)+"</td>";
+      row += formatCell(trend["upCI"][index]*100)+"</td>";
       var trend_sig=""
       if (trend["lowCI"][index]>0)
         trend_sig="Increasing"

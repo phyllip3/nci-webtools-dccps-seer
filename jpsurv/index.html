@@ -530,7 +530,7 @@
                     <button onclick="calculateTrend()" class="btn btn-primary btn-sm" type="button">Select</button>
               </div>
             </div>
-            <h5>Relative Change in Survival</h5>
+            <!-- <h5>Relative Change in Survival</h5>
             <div class="table-responsive">
               <table id="trend-apc" class="table table-striped table-bordered table-condensed">
                 <thead>
@@ -547,9 +547,9 @@
                 <tbody>
                 </tbody>
               </table>
-            </div>
+            </div> -->
 
-            <h5>Absolute Change in Survival</h5>
+            <h5>Average Change in the Cumulative Survival by Diagnosis Year*</h5>
             <div class="table-responsive">
               <table id="trend-aac" class="table table-striped table-bordered table-condensed">
                 <thead>
@@ -567,8 +567,11 @@
                 </tbody>
               </table>
             </div>
+            <div id='footnote'>
+              <sup>*Numbers represent the difference in cumulative survival rate (as the percent surviving) from one year at diagnosis to the previous.</sup>
+            </div>
 
-            <h5>Relative Change in Hazard</h5>
+            <h5>Percent Change in the Annual Probability of Dying of Cancer by Diagnosis Year</h5>
             <div class="table-responsive">
               <table id="trend-dap" class="table table-striped table-bordered table-condensed">
                 <thead>
