@@ -1113,19 +1113,20 @@ function updateGraphLinks(token_id) {
   // $("#graph-time-dataset-link").attr("href", "tmp/data_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".csv");
   // $(".full-dataset-link").attr("href", "tmp/Full_Predicted-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.imageId+".csv");
 
-  document.querySelector("#graph-year-dataset-link").onclick = 
-  function(event) {
+  document.querySelector("#graph-year-dataset-link").onclick = function(event) {
     event.preventDefault(); 
     downloadData('survByYear'); 
   };
   document.querySelector("#graph-time-dataset-link").onclick = function(event) {
     event.preventDefault(); 
-    downloadData('survByInt');
+    downloadData('survByTime');
   };
-  document.querySelector(".full-dataset-link").onclick = function(event) {
-    event.preventDefault(); 
-    downloadData('fullData');
-  };
+  Array.prototype.map.call(document.querySelectorAll(".full-dataset-link"), function(link) {
+    link.onclick = function(event) {
+      event.preventDefault(); 
+      downloadData('fullData');
+    }
+  })
 }
 
 function updateSelections(token_id) {
@@ -3037,7 +3038,7 @@ function genereateSheet(json) {
 
 function downloadData(type) {
   var survByYear = jpsurvData.results.YearData.RelSurvYearData;
-  var survByInt = jpsurvData.results.IntData.RelSurIntData;
+  var survByTime = jpsurvData.results.IntData.RelSurIntData;
   var fullPred = jpsurvData.results.fullPredicted;
   var cohort = document.querySelector('#cohort-display').value;
   var wb = XLSX.utils.book_new();
@@ -3046,11 +3047,11 @@ function downloadData(type) {
   };
   
   if (type == 'survByYear') {
-    XLSX.utils.book_append_sheet(wb, genereateSheet(survByYear), type);
-  } else if (type == 'survByInt') {  
-    XLSX.utils.book_append_sheet(wb, genereateSheet(survByInt), type);
+    XLSX.utils.book_append_sheet(wb, genereateSheet(survByYear), 'Survival vs. Year');
+  } else if (type == 'survByTime') {  
+    XLSX.utils.book_append_sheet(wb, genereateSheet(survByTime), 'Survival vs. Time');
   } else if (type == 'fullData') {
-    XLSX.utils.book_append_sheet(wb, genereateSheet(fullPred), type);
+    XLSX.utils.book_append_sheet(wb, genereateSheet(fullPred), 'Full Dataset');
   }
 
   XLSX.utils.book_append_sheet(wb, settingsSheet(), 'Settings');
