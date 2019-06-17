@@ -1109,9 +1109,23 @@ function updateTrendGraph(trend, table_id) {
   }
 }
 function updateGraphLinks(token_id) {
-  $("#graph-year-dataset-link").attr("href", "tmp/data_Year-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".csv");
-  $("#graph-time-dataset-link").attr("href", "tmp/data_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".csv");
-  $(".full-dataset-link").attr("href", "tmp/Full_Predicted-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.imageId+".csv");
+  // $("#graph-year-dataset-link").attr("href", "tmp/data_Year-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".csv");
+  // $("#graph-time-dataset-link").attr("href", "tmp/data_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".csv");
+  // $(".full-dataset-link").attr("href", "tmp/Full_Predicted-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.imageId+".csv");
+
+  document.querySelector("#graph-year-dataset-link").onclick = 
+  function(event) {
+    event.preventDefault(); 
+    downloadData('survByYear'); 
+  };
+  document.querySelector("#graph-time-dataset-link").onclick = function(event) {
+    event.preventDefault(); 
+    downloadData('survByInt');
+  };
+  document.querySelector(".full-dataset-link").onclick = function(event) {
+    event.preventDefault(); 
+    downloadData('fullData');
+  };
 }
 
 function updateSelections(token_id) {
@@ -2942,7 +2956,106 @@ function analysisDisplayed() {
     return  ( jpsurvData.stage2completed && $("#right_panel:visible").length == 1) ? true : false
 }
 
+// Creates a sheet containing selections for cohorts, model, and advanced options
+function settingsSheet() {
+  cohortVars = jpsurvData.calculate.form.cohortVars;
+  cohortValues = jpsurvData.calculate.form.cohortValues;
+  advOptions = jpsurvData.calculate.static.advanced;
+  title = jpsurvData.calculate.static.yearOfDiagnosisTitle;
+  range = jpsurvData.calculate.form.yearOfDiagnosisRange;
+  interval = jpsurvData.calculate.form.interval;
+  jp = jpsurvData.calculate.form.maxjoinPoints;
+  options = [
+              'Delete Last Interval', 
+              'Minimum Number of years between Joinpoints (Excluding Joinpoints)',
+              'Minimum Number of Years before First Joinpoint (Excluding Joinpoint)',
+              'Minimum Number of Years after Last Joinpoint (Excluding Joinpoint)',
+              'Number of Calendar Years of Projected Survival'
+            ];
+  // table header
+  var sheet = [['Cohort and Model Specifications']];
+  
+  // add settings and values
+  sheet.push(['Year of Diagnosis', title]);
+  sheet.push(['Year of Diagnosis Range', (range[0]+' - '+range[1])]);
+  sheet.push(['Intervals from Diagnosis Range', interval]);
+  for (i in cohortVars) {
+    sheet.push([cohortVars[i], cohortValues[i].replace(/\"/g, '')]);
+  }
+  sheet.push(['Maximum Joinpoints', jp], [], [], ['Advanced Options']);
+  Object.keys(advOptions).forEach(function(key, i) {
+    if (i == 0) {
+      advOptions[key] == 'F' ? sheet.push([options[i], 'No']) : sheet.push([options[i], 'Yes'])
+    } else {
+      sheet.push([options[i], advOptions[key]]);
+    }
+  });
 
+  // set column width
+  var ws = XLSX.utils.aoa_to_sheet(sheet);
+  var colWidth = [
+                  {wch: 60},
+                  {wch: 10},
+                 ];
+  ws['!cols'] = colWidth;
+
+  return ws;
+}
+
+// Creates an excel worksheet from JSON parameter.
+// Destructures JSON into an array of arrays. 
+// Inner arrays and values corespond to rows and columns e.g.
+//  [ 
+//    [A1, A2, A3],
+//    [B1, B2, B3],
+//    ...
+//  ]
+function genereateSheet(json) {
+  var headers = Object.keys(json);
+  var input = [];
+  var sheet = [headers];
+
+  // include input data depending on type of statistic
+  // if (jpsurvData.additional.statistic == 'Relative Survival') {
+  //   input = [];
+  // } else if (jpsurvData.additional.statistic == 'Cause-Specific Survival') {
+  //   input = [];
+  // }
+
+  Object.values(json).forEach(function(colData) {
+    colData.forEach(function(value, row) {
+      if (sheet[row+1]) {
+        sheet[row+1].push(value);
+      } else {
+        sheet.push([value]);
+      }
+    })
+  });
+
+  return XLSX.utils.aoa_to_sheet(sheet);
+}
+
+function downloadData(type) {
+  var survByYear = jpsurvData.results.YearData.RelSurvYearData;
+  var survByInt = jpsurvData.results.IntData.RelSurIntData;
+  var fullPred = jpsurvData.results.fullPredicted;
+  var cohort = document.querySelector('#cohort-display').value;
+  var wb = XLSX.utils.book_new();
+  wb.props = {
+    Title: type + ' - ' + cohort 
+  };
+  
+  if (type == 'survByYear') {
+    XLSX.utils.book_append_sheet(wb, genereateSheet(survByYear), type);
+  } else if (type == 'survByInt') {  
+    XLSX.utils.book_append_sheet(wb, genereateSheet(survByInt), type);
+  } else if (type == 'fullData') {
+    XLSX.utils.book_append_sheet(wb, genereateSheet(fullPred), type);
+  }
+
+  XLSX.utils.book_append_sheet(wb, settingsSheet(), 'Settings');
+  XLSX.writeFile(wb, wb.props.Title+'.xlsx')
+}
 
 
 
