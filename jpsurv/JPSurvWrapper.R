@@ -503,7 +503,7 @@ getFullDataDownload <- function(filePath,jpsurvDataString,com,first_calc=FALSE) 
   }
   print(paste("the combination is com: ",com," the selected joinpoint is: ",jpInd))
   #Full_Data=outputData$fittedResult$fullpredicted
-  Full_Data=outputData$fittedResult$FitList[[jpInd+1]]$predicted
+  Full_Data=outputData$fittedResult$FitList[[jpInd+1]]$fullpredicted
 
   cohorts=jpsurvData$calculate$form$cohortVars
 
@@ -873,7 +873,7 @@ getFullPredicted <- function(filePath, jpsurvDataString, com) {
     jpInd = getSelectedModel(filePath, jpsurvDataString ,com) - 1
   }
 
-  full = outputData$fittedResult$FitList[[jpInd+1]]$predicted
+  full = outputData$fittedResult$FitList[[jpInd+1]]$fullpredicted
 }
 
 # get input data to show alongside results
@@ -915,7 +915,7 @@ getInputData <- function(filePath, jpsurvDataString, com, statistic, yearVar) {
 }
 
 joinInputResult <- function(input, results, yearVar) {
-  merge(input, results)
+  merge(input, results, all.y = TRUE)
 }
 
 # join input with "Survival vs Time" (RelSurInt) results
