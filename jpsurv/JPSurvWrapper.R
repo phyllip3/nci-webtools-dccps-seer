@@ -302,8 +302,6 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
   # Full_data=getFullDataDownload(filePath,jpsurvDataString,com,first_calc)
   # print("Completed getting Full_data")
 
-  fullPredicted = getFullPredicted(filePath, jpsurvDataString, com)
-
    statistic=jpsurvData$additional$statistic
   if (statistic=="Relative Survival")
   {
@@ -315,6 +313,15 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
     statistic="CauseSpecific_Survival_Cum" 
   }
   
+  # get year column
+  yearVar = getCorrectFormat(jpsurvData$calculate$static$yearOfDiagnosisVarName)  
+
+  # join input and results to show alongside eachother when downloading results
+  fullPredicted = getFullPredicted(filePath, jpsurvDataString, com)
+  inputData = getInputData(filePath, jpsurvDataString, com, statistic, yearVar)
+  joinInputFull = joinInputResult(inputData, fullPredicted, yearVar)
+  joinInputYear = joinInputResult(inputData, YearGraph$RelSurvYearData, yearVar)
+  joinInputInt = joinInputInt(inputData, IntGraph$RelSurIntData, yearVar)
 
   jpInd=jpsurvData$additional$headerJoinPoints
   print(jpInd)
@@ -340,7 +347,28 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
 
   print("statistic")
   print(statistic)
-  jsonl =list("IntData"=IntGraph,"YearData"=YearGraph,"Coefficients"=Coefficients,"ModelSelection" = ModelSelection, "JP"=JP,"SelectedModel"=SelectedModel,"Runs"=runs,"input_type"=input_type,"headers"=headers,"statistic"=statistic,"com"=com,"jpInd"=jpInd,"imageId"=imageId,"yod"=yod,"intervals"=intervals, "fullPredicted" = fullPredicted) #returns
+  jsonl =list("IntData" = IntGraph,
+              "YearData" = YearGraph,
+              "Coefficients" = Coefficients,
+              "ModelSelection" = ModelSelection, 
+              "JP" = JP,
+              "SelectedModel" = SelectedModel,
+              "Runs" = runs,
+              "input_type" = input_type,
+              "headers" = headers,
+              "statistic" = statistic,
+              "com" = com,
+              "jpInd" = jpInd,
+              "imageId" = imageId,
+              "yod" = yod,
+              "intervals" = intervals, 
+              "fullPredicted" = fullPredicted,
+              "inputData" = inputData, 
+              "joinFull" = joinInputFull,
+              "joinYear" = joinInputYear,
+              "joinInt" = joinInputInt,
+              "yearVar" = yearVar) #returns
+
   exportJson <- toJSON(jsonl)
   filename = paste(filePath, paste("results-", jpsurvData$tokenId,"-",com,"-",jpInd, ".json", sep=""), sep="/") #CSV file to download
   write(exportJson, filename)
@@ -838,13 +866,59 @@ getRunsString<-function(filePath,jpsurvDataString){
 # get full prediction for "Download Full Dataset"
 getFullPredicted <- function(filePath, jpsurvDataString, com) {
   jpsurvData <<- fromJSON(jpsurvDataString)
-  file = paste(filePath, paste("output-", jpsurvData$tokenId,"-",com,".rds", sep=""), sep="/")
+  file = paste(filePath, paste("output-", jpsurvData$tokenId, "-", com, ".rds", sep = ""), sep = "/")
   outputData = readRDS(file)  
-  jpInd=jpsurvData$additional$headerJoinPoints
-  if(is.null(jpInd))
-  {
-    jpInd=getSelectedModel(filePath,jpsurvDataString,com)-1
+  jpInd = jpsurvData$additional$headerJoinPoints
+  if (is.null(jpInd)) {
+    jpInd = getSelectedModel(filePath, jpsurvDataString ,com) - 1
   }
 
   full = outputData$fittedResult$FitList[[jpInd+1]]$predicted
+}
+
+# get input data to show alongside results
+getInputData <- function(filePath, jpsurvDataString, com, statistic, yearVar) {
+  jpsurvData <<- fromJSON(jpsurvDataString)
+  file = paste(filePath, paste("output-", jpsurvData$tokenId, "-", com, ".rds", sep = ""), sep = "/")
+  outputData = readRDS(file)  
+  jpInd = jpsurvData$additional$headerJoinPoints
+  if (is.null(jpInd)) {
+    jpInd = getSelectedModel(filePath, jpsurvDataString, com) - 1
+  }
+
+  columns = c()
+
+  # get relevant input columns
+  if (statistic == 'Relative_Survival_Cum') {
+    columns = c(yearVar,
+                'Died',
+                'Alive_at_Start',
+                'Lost_to_Followup',
+                'Expected_Survival_Interval',
+                'Relative_Survival_Cum',
+                'Expected_Survival_Cum', 
+                'Observed_Survival_Cum', 
+                'Observed_Survival_Interval', 
+                'Relative_Survival_Interval', 
+                'Relative_SE_Interval',
+                'Relative_SE_Cum')
+  } else {
+    columns = c(yearVar,
+                'Died',
+                'Alive_at_Start',
+                'CauseSpecific_Survival_Interval',
+                'CauseSpecific_Survival_Cum',
+                'CauseSpecific_SE_Interval',
+                'CauseSpecific_SE_Cum')
+  }
+  data = outputData$seerdata[, columns]
+}
+
+joinInputResult <- function(input, results, yearVar) {
+  merge(input, results)
+}
+
+# join input with "Survival vs Time" (RelSurInt) results
+joinInputInt <- function(input, results, yearVar) {
+  merge(input, results, all.y = TRUE)
 }

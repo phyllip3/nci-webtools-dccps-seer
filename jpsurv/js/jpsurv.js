@@ -3011,35 +3011,71 @@ function settingsSheet() {
 //    [B1, B2, B3],
 //    ...
 //  ]
-function genereateSheet(json) {
-  var headers = Object.keys(json);
+function genereateSheet(data) {
+  // var headers = Object.keys(json);
   var input = [];
-  var sheet = [headers];
+  var yearVar = jpsurvData.results.yearVar;
 
   // include input data depending on type of statistic
-  // if (jpsurvData.additional.statistic == 'Relative Survival') {
-  //   input = [];
-  // } else if (jpsurvData.additional.statistic == 'Cause-Specific Survival') {
-  //   input = [];
-  // }
+  if (jpsurvData.additional.statistic == 'Relative Survival') {
+    input = [ yearVar,
+              'Interval',
+              'Died',
+              'Alive_at_Start',
+              'Lost_to_Followup',
+              'Expected_Survival_Interval',
+              'Expected_Survival_Cum',
+              'Observed_Survival_Cum', 
+              'Observed_Survival_Interval', 
+              'Relative_Survival_Interval', 
+              'Relative_Survival_Cum',
+              'Relative_SE_Interval',
+              'Relative_SE_Cum',
+              'pred_int',
+              'pred_cum',
+              'pred_int_se',
+              'pred_cum_se'];
+  } else if (jpsurvData.additional.statistic == 'Cause-Specific Survival') {
+    input = [ yearVar,
+              'Interval',
+              'Died',
+              'Alive_at_Start',
+              'Lost_to_Followup',
+              'CauseSpecific_Survival_Interval',
+              'CauseSpecific_Survival_Cum',
+              'CauseSpecific_SE_Interval',
+              'CauseSpecific_SE_Cum',
+              'pred_int',
+              'pred_cum',
+              'pred_int_se',
+              'pred_cum_se'];
+  }
 
-  Object.values(json).forEach(function(colData) {
-    colData.forEach(function(value, row) {
-      if (sheet[row+1]) {
-        sheet[row+1].push(value);
-      } else {
-        sheet.push([value]);
-      }
-    })
+  var sheet = [input];
+  var remove = [];
+  input.forEach(function(col, index) {
+    if (data[col]) {
+      data[col].forEach(function(value, row) {
+        if (sheet[row + 1]) {
+          sheet[row + 1].push(value);
+        } else {
+          sheet.push([value]);
+        }
+      });
+    } else { // remove non-existant columns 
+      sheet[0] = sheet[0].filter(function(val) {
+        return val != col;
+      });
+    }
   });
 
   return XLSX.utils.aoa_to_sheet(sheet);
 }
 
 function downloadData(type) {
-  var survByYear = jpsurvData.results.YearData.RelSurvYearData;
+  var survByYear = jpsurvData.results.joinYear;
   var survByTime = jpsurvData.results.IntData.RelSurIntData;
-  var fullPred = jpsurvData.results.fullPredicted;
+  var fullPred = jpsurvData.results.joinFull;
   var cohort = document.querySelector('#cohort-display').value;
   var wb = XLSX.utils.book_new();
   wb.props = {
