@@ -1,6 +1,7 @@
 library('rjson')
 library('JPSurv')
-library("ggplot2");
+library("ggplot2")
+library('dplyr');
 
 VERBOSE=TRUE
 
@@ -592,11 +593,21 @@ getRelativeSurvivalByYearWrapper <- function (filePath,jpsurvDataString,first_ca
 
   maxyear <- max(survData[[yearOfDiagnosisVarName]])
 
+  # calculate difference in cumulative survival between a calendar year and one year prior
+  survData$diff <- survData$pred_cum / lag(survData$pred_cum)
+  # remove every 2 row entries so to not clutter the graph with labels
+  if (length(survData$diff) > 2) {
+    survData$diff[c(T, T, F)] <- NA
+  } 
+
   #JP Trendgraph
   ggplot(survData, aes(x=survData[[yearOfDiagnosisVarName]], group=survData[[interval_var]], colour=factor(survData[[interval_var]]))) + 
     geom_line(aes(y=pred_cum)) + 
     geom_point(aes(y=survData[[observed]])) +
-    labs(title="Survival by Year of Diagnosis",
+    geom_text(aes(label = ifelse(is.na(survData[['diff']]), '', paste('%', round(survData[['diff']], 3))), 
+      x=survData[[yearOfDiagnosisVarName]], y=survData[['pred_cum']]),
+      hjust = 0, vjust = -1.9, size = 3) +
+    labs(title="Cumulative Survival - Absolute Change",
          x="Year of Diagnosis",
          y=paste("Cumulative",type,"Survival", sep=" ")) +
     scale_x_continuous(breaks=seq(0,maxyear,5)) +
