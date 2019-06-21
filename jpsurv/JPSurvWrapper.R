@@ -597,7 +597,6 @@ getRelativeSurvivalByYearWrapper <- function (filePath,jpsurvDataString,first_ca
   survData$diff <- survData$pred_cum / lag(survData$pred_cum)
   # remove every 2 row entries so to not clutter the graph with labels
   if (length(survData$diff) > 2) {
-<<<<<<< HEAD
     survData$diff[c(T, T, T, T , F)] <- NA
   } 
 
@@ -605,7 +604,6 @@ getRelativeSurvivalByYearWrapper <- function (filePath,jpsurvDataString,first_ca
   ggplot(survData, aes(x=survData[[yearOfDiagnosisVarName]], group=survData[[interval_var]], colour=factor(survData[[interval_var]]))) + 
     geom_line(aes(y=pred_cum)) + 
     geom_point(aes(y=survData[[observed]])) +
-<<<<<<< HEAD
     geom_text(aes(label = ifelse(is.na(survData[['diff']]), '', round(survData[['diff']], 2)), 
       x=survData[[yearOfDiagnosisVarName]], y=survData[['pred_cum']]),
       hjust = 0, vjust = -1.9, size = 3) +
