@@ -981,8 +981,8 @@ fixIntGraph <- function(graph) {
   if (is.null(jpInd)) {
     jpInd = getSelectedModel(filePath, jpsurvDataString, com) - 1
   }
-  print('fda')
   graph[[jpInd+1]]$Relative_Survival_Cum[1] <- graph[[jpInd+1]]$Relative_Survival_Cum[1] * 100
+  graph[[jpInd+1]]$CauseSpecific_Survival_Cum[1] <- graph[[jpInd+1]]$CauseSpecific_Survival_Cum[1] * 100
   graph[[jpInd+1]]$pred_cum[1] <- graph[[jpInd+1]]$pred_cum[1] * 100
 
   graph
