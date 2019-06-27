@@ -193,7 +193,7 @@ function addEventListeners() {
     }
   });
 
-  $("#icon").on('click', slideToggle);
+  // $("#icon").on('click', slideToggle);
 
   $(document).on('click', '#model-selection-table tbody tr', function(e) {
     e.stopPropagation();
@@ -858,21 +858,21 @@ function updateGraphs(token_id) {
 
   //Populate graph-year
   $("#graph-year-tab").find( "img" ).show();
-  $("#graph-year-tab").find( "img" ).css("width","90%");
+  $("#graph-year-tab").find( "img" ).css("width","70%");
   $("#graph-year-tab").find( "img" ).attr("src", "tmp/plot_Year-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
   $("#graph-year-table > tbody").empty();
   $("#graph-year-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
   //Populate death-year
   $("#graph-death-tab").find( "img" ).show();
-  $("#graph-death-tab").find( "img" ).css("width","90%");
+  $("#graph-death-tab").find( "img" ).css("width","70%");
   $("#graph-death-tab").find( "img" ).attr("src", "tmp/plot_Death-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
   $("#graph-death-table > tbody").empty();
   $("#graph-death-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
   //Populate time-year
   $("#graph-time-tab").find( "img" ).show();
-  $("#graph-time-tab").find( "img" ).css("width","90%");
+  $("#graph-time-tab").find( "img" ).css("width","70%");
   $("#graph-time-tab").find( "img" ).attr("src", "tmp/plot_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
 
   var row;
@@ -1179,6 +1179,7 @@ function calculateFittedResultsCallback() {
   $("#right_panel").css('display', 'inline-block');
   $("#help").hide();
   $("#icon").css('visibility', 'visible');
+  Slide_menu_Horz('hide');
 
   $("#year-of-diagnosis").empty();
   for (year=jpsurvData.calculate.form.yearOfDiagnosisRange[0];year<=jpsurvData.calculate.form.yearOfDiagnosisRange[1];year++) {
@@ -2331,10 +2332,10 @@ function Slide_menu_Horz(action) {
     $("#right_panel").removeClass("col-lg-7");
     $("#right_panel").removeClass("col-md-7");
 
-
-
     $("#right_panel").addClass("col-lg-12");
     $("#right_panel").addClass("col-md-12");
+
+    $("#right_panel").css("margin-top", "0%")
     }, 300);
 
 
@@ -2350,6 +2351,9 @@ function Slide_menu_Horz(action) {
 
        $("#right_panel").addClass("col-lg-7");
        $("#right_panel").addClass("col-md-7");
+
+       $("#right_panel").css("margin-top", "2%")
+
        left_panel_width=$("#slideoutTab").width();
 
        $("#icon").animate({

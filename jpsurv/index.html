@@ -311,7 +311,7 @@
       </div>
       <div id="right_panel" class="col-md-7 col-lg-7 col-sm-12" style="display:none;margin-top:2%">
         <div id="cohort-join-points" class="box">
-          <div class="row model-select-row" style="padding-bottom:15px;">
+          <div class="row model-select-row">
             <div class="col-md-12">
               <strong>Cohort</strong>&nbsp;
               <select id="cohort-display" aria-label="cohort display"></select>
@@ -320,11 +320,19 @@
                 class="btn btn-primary btn-sm pull-right button_group_separator" aria-label="Export">
                 Export
               </a>
-            </div>
-          </div>
-          <div class="row model-select-row">
-            <div class="col-md-10">
-              <strong>Model Selection</strong>
+
+              <label title="Rounded to decimal places." style="margin-left:10px;">Number of Decimal Places</label>
+              <select name="abcselect" id="precision" aria-label="Round">
+                <option>1</option>
+                <option selected>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+              </select>
             </div>
           </div>
           <div class="row">
@@ -345,26 +353,11 @@
               </table>
             </div>
           </div>
-          <div class="row model-select-row">
-              <h4>Display Options</h4>
-                  <label title="Rounded to decimal places." style="margin-left:10px;">Number of Decimal Places</label>
-                  <select name="abcselect" id="precision" aria-label="Round">
-                    <option>1</option>
-                    <option selected>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option>6</option>
-                    <option>7</option>
-                    <option>8</option>
-                    <option>9</option>
-                  </select>
-      </div>
         </div>
 
         <!-- Message Panel for Error or Warning-->
 
-        <ul id="jpsurv-tabs" class="nav nav-tabs responsive">
+        <ul id="jpsurv-tabs" class="nav nav-tabs main-tab responsive">
           <li class="active"><a href="#home" data-toggle="tab">Survival Graph/Data</a></li>
           <li><a href="#estimates-tab" data-toggle="tab">Model Estimates</a></li>
           <li><a id="trends-tab-anchor" href="#trends-tab" data-toggle="tab">Trends</a></li>
@@ -374,7 +367,7 @@
           <!-- Home Tab -->
           <div class="tab-pane active" id="home">
             <!-- Sub Tabs for Home -->
-            <ul class="nav nav-tabs" id="dashboard_tabs">
+            <ul class="nav nav-tabs sub-tab" id="dashboard_tabs">
               <li class="active"><a href="#graph-year-tab" data-toggle="tab">Survival vs. Year of Diagnosis</a></li>
               <li><a href="#graph-death-tab" data-toggle="tab">Death vs. Year at Diagnosis</a></li>
               <li><a href="#graph-time-tab" data-toggle="tab">Survival vs. Time Since Diagnosis</a></li>
@@ -384,21 +377,21 @@
               <div id="graph-year-tab" class="tab-pane fade active in">
                 <div class="row">
                   <div class="col-lg-6 d-flex align-items-start row">
-                      <label for="interval-years" class="mx-1 col-lg-3">
-                        <strong>Interval Years</strong>
-                      </label>
-                      <div class="col-lg-2">
-                          <select id="interval-years" class="mx-1" multiple>
-                              <option selected>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option selected>4</option>
-                            </select>
-                      </div>
-                      <div class="col-lg-2">
-                        <button id="recalculate" class="btn btn-primary btn-sm" type="button">Select</button>
-                      </div>
-                      <div id="selected-interval-years" class="col-lg-5"></div>
+                    <label for="interval-years" class="mx-1 col-lg-3">
+                      <strong>Interval Years</strong>
+                    </label>
+                    <div class="col-lg-2">
+                        <select id="interval-years" class="mx-1" multiple>
+                            <option selected>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option selected>4</option>
+                          </select>
+                    </div>
+                    <div class="col-lg-2">
+                      <button id="recalculate" class="btn btn-primary btn-sm" type="button">Select</button>
+                    </div>
+                    <div id="selected-interval-years" class="col-lg-5"></div>
                   </div>
                   <div class="col-lg-6 text-right">
                     <span class="">
