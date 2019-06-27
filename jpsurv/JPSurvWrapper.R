@@ -313,11 +313,11 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
 
   # create datasets for download
   fullDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'full')
-  deathGraphDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'death')
+  deathGraphData <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'death')
   survGraphDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'survive')
 
   # create graphs
-  deathGraph <- getDeathByYear(filePath, jpsurvDataString, first_calc, com, interval, observed = obsintvar, use_default, deathGraphDownload)
+  deathGraph <- getDeathByYearWrapper(filePath, jpsurvDataString, first_calc, com, interval, observed = obsintvar, use_default, deathGraphData)
 
   SelectedModel=getSelectedModel(filePath,jpsurvDataString,com)
   if (first_calc==TRUE||is.null(jpInd)) {
@@ -355,7 +355,7 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
               "yearVar" = yearVar,
               "deathData" = deathGraph,
               "survGraphDownload" = survGraphDownload,
-              "deathGraphDownload" = deathGraphDownload,
+              "deathGraphData" = deathGraphData,
               "fullDownload" = fullDownload) #returns
 
   exportJson <- toJSON(jsonl)
@@ -472,7 +472,7 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
   outputData=list("seerdata"=seerdata, "fittedResult"=fittedResult)
 
   # transform data to percent
-  # outputData = toPercent(outputData, statistic)
+  outputData = scaleTo(outputData, 'percent')
 
   iteration=jpsurvData$plot$static$imageId
   
@@ -923,64 +923,64 @@ getRunsString<-function(filePath,jpsurvDataString){
 #   merge(input, results, all.y = TRUE)
 # }
 
-# multiply input data by 100 to display as percentage
-toPercent <- function(data, statistic) {
-  jpInd = jpsurvData$additional$headerJoinPoints
-  if (is.null(jpInd)) {
-    jpInd = getSelectedModel(filePath, jpsurvDataString, com) - 1
-  }
+# modify data scaling by 100 for display as percentage or calculation
+scaleTo <- function(data, type) {
+  columns = c('Observed_Survival_Cum', 
+              'Observed_Survival_Interval', 
+              'Expected_Survival_Interval',
+              'Expected_Survival_Cum',
+              'Relative_Survival_Interval', 
+              'Relative_Survival_Cum',
+              'Observed_SE_Interval',
+              'Observed_SE_Cum',
+              'Relative_SE_Interval',
+              'Relative_SE_Cum',
+              'CauseSpecific_Survival_Interval',
+              'CauseSpecific_Survival_Cum',
+              'CauseSpecific_SE_Interval',
+              'CauseSpecific_SE_Cum',
+              'Predicted_Int',
+              'Predicted_Cum',
+              'Predicted_Int_SE',
+              'Predicted_Cum_SE',
+              'pred_cum',
+              'pred_cum_se',
+              'pred_int',
+              'pred_int_se')
   
-  columns = c()
-  if (statistic == 'Relative_Survival_Cum') {
-      columns = c('Observed_Survival_Cum', 
-                  'Observed_Survival_Interval', 
-                  'Expected_Survival_Interval',
-                  'Expected_Survival_Cum',
-                  'Relative_Survival_Interval', 
-                  'Relative_Survival_Cum',
-                  'Observed_SE_Interval',
-                  'Observed_SE_Cum',
-                  'Relative_SE_Interval',
-                  'Relative_SE_Cum',
-                  'pred_cum',
-                  'pred_cum_se',
-                  'pred_int',
-                  'pred_int_se')
-  } else {
-      columns = c('CauseSpecific_Survival_Interval',
-                  'CauseSpecific_Survival_Cum',
-                  'CauseSpecific_SE_Interval',
-                  'CauseSpecific_SE_Cum',
-                  'Expected_Survival_Interval',
-                  'pred_cum',
-                  'pred_cum_se',
-                  'pred_int',
-                  'pred_int_se')
-  }
 
   for (col in columns) {
-    if (!is.null(data$seerdata[[col]])) {
-      data$seerdata[[col]] <- data$seerdata[[col]] * 100
-    }
-    if (!is.null(data$fittedResult$FitList[[jpInd+1]]$predicted[[col]])) {
-      data$fittedResult$FitList[[jpInd+1]]$predicted[[col]] <- data$fittedResult$FitList[[jpInd+1]]$predicted[[col]] * 100
-      data$fittedResult$FitList[[jpInd+1]]$fullpredicted[[col]] <- data$fittedResult$FitList[[jpInd+1]]$fullpredicted[[col]] * 100
+    if (type == 'percent') { # scale input and output data by 100 to display as percent
+      if (!is.null(data$seerdata[[col]])) {
+        data$seerdata[[col]] <- data$seerdata[[col]] * 100
+      }
+      for (nJP in 1:length(data$fittedResult$FitList)) {
+         if (!is.null(data$fittedResult$FitList[[nJP]]$predicted[[col]])) {
+          data$fittedResult$FitList[[nJP]]$predicted[[col]] <- data$fittedResult$FitList[[nJP]]$predicted[[col]] * 100
+          data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] <- data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] * 100
+        }
+      }
+    } else { # scale back to decimal for plotting graphs
+      if (!is.null(data[[col]])) {
+        data[[col]] <- data[[col]] / 100
+      }
+      for (nJP in 1:length(data$fittedResult$FitList)) {
+         if (!is.null(data$fittedResult$FitList[[nJP]]$predicted[[col]])) {
+          data$fittedResult$FitList[[nJP]]$predicted[[col]] <- data$fittedResult$FitList[[nJP]]$predicted[[col]] / 100
+          data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] <- data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] / 100
+        }
+      }
     }
   }
-  data
+  return(data)
 }
 
 # transform first row of int graph to percent from decimal 
 fixIntGraph <- function(graph) {
-  jpInd = jpsurvData$additional$headerJoinPoints
-  if (is.null(jpInd)) {
-    jpInd = getSelectedModel(filePath, jpsurvDataString, com) - 1
-  }
-  graph[[jpInd+1]]$Relative_Survival_Cum[1] <- graph[[jpInd+1]]$Relative_Survival_Cum[1] * 100
-  graph[[jpInd+1]]$CauseSpecific_Survival_Cum[1] <- graph[[jpInd+1]]$CauseSpecific_Survival_Cum[1] * 100
-  graph[[jpInd+1]]$pred_cum[1] <- graph[[jpInd+1]]$pred_cum[1] * 100
-
-  graph
+  graph[[1]]$Relative_Survival_Cum[1] <- graph[[1]]$Relative_Survival_Cum[1] * 100
+  graph[[1]]$CauseSpecific_Survival_Cum[1] <- graph[[1]]$CauseSpecific_Survival_Cum[1] * 100
+  graph[[1]]$pred_cum[1] <- graph[[1]]$pred_cum[1] * 100
+  return(graph)
 }
 
 downloadDataWrapper <- function(jpsurvDataString, filePath, com, yearVar, jpInd, interval, downloadtype) {
@@ -1007,27 +1007,33 @@ downloadDataWrapper <- function(jpsurvDataString, filePath, com, yearVar, jpInd,
 }
 
 # Graphs the Death vs Year graph
-getDeathByYear <- function (filePath, jpsurvDataString, first_calc, com, interval, observed, use_default, graphDownload) {
+getDeathByYearWrapper <- function (filePath, jpsurvDataString, first_calc, com, interval, observed, use_default, graphData) {
   jpsurvData <<- fromJSON(jpsurvDataString)
   iteration = jpsurvData$plot$static$imageId
+  yearVar = getCorrectFormat(jpsurvData$calculate$static$yearOfDiagnosisVarName)
   nJP = jpsurvData$additional$headerJoinPoints
   if (first_calc == TRUE || is.null(nJP)) {
     nJP = getSelectedModel(filePath, jpsurvDataString, com) - 1
   }
+
+  # scale data back to decimal
   data = paste(filePath, paste("output-", jpsurvData$tokenId,"-",com,".rds", sep=""), sep="/")
   outputData = readRDS(data)
-  fit = outputData[['fittedResult']]
-  yearVar = getCorrectFormat(jpsurvData$calculate$static$yearOfDiagnosisVarName)
+  scaleOutput = scaleTo(outputData, 'decimal')
+  fit = scaleOutput[['fittedResult']]
+  scaleGraph = scaleTo(graphData, 'decimal')
+
   annotation = 0
   if (nJP <= 3 && length(jpsurvData$additional$intervals) <= 3) {
     annotation = 1
   }
+
   # create graph
-  graph = plot.dying.year.annotate(graphDownload, fit, nJP, yearVar, observed, predintvar="Predicted_Int", interval, annotation)
+  graph = plot.dying.year.annotate(scaleGraph, fit, nJP, yearVar, observed, predintvar="Predicted_Int", interval, annotation)
   graphFile = paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
   ggsave(file=paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
 
-  results = list("deathGraph" = graphFile, "deathData" = graphDownload)
+  results = list("deathGraph" = graphFile, "deathData" = graphData)
 }
 
 #########################################################################################################

@@ -3101,7 +3101,7 @@ function genereateSheet(data) {
 }
 
 function downloadData(type) {
-  var survByYear = jpsurvData.results.graphDownload
+  var survByYear = jpsurvData.results.survGraphDownload;
   var survByTime = jpsurvData.results.IntData.RelSurIntData;
   var fullPred = jpsurvData.results.fullDownload;
   var cohort = document.querySelector('#cohort-display').value;
