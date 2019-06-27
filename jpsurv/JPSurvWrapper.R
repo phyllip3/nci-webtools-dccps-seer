@@ -292,12 +292,13 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
   # Full_data=getFullDataDownload(filePath,jpsurvDataString,com,first_calc)
   # print("Completed getting Full_data")
 
-   statistic=jpsurvData$additional$statistic
+  statistic = jpsurvData$additional$statistic
+  obsintvar = ''
   if (statistic=="Relative Survival") {
+    obsintvar = 'Relative_Survival_Interval'
     statistic="Relative_Survival_Cum"
-  } 
-  
-  if (statistic=="Cause-Specific Survival") {
+  } else if (statistic=="Cause-Specific Survival") {
+    obsintvar = 'CauseSpecific_Survival_Interval'
     statistic="CauseSpecific_Survival_Cum" 
   }
   
@@ -307,25 +308,17 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
   }
   print(jpInd)
 
- # get year column var name
+  # get year column var name
   yearVar = getCorrectFormat(jpsurvData$calculate$static$yearOfDiagnosisVarName)  
 
-  # download.data params
-  jpsurvData <<- fromJSON(jpsurvDataString)
-  file = paste(filePath, paste("output-", jpsurvData$tokenId, "-", com, ".rds", sep = ""), sep = "/")
-  outputData = readRDS(file)    
-  input = outputData[['seerdata']]
-  fit = outputData[['fittedResult']]
-  yearvar = yearVar  
-  intervals = c()
-  for (i in 1:length(jpsurvData$additional$intervals)) {
-      intervals = c(intervals,jpsurvData$additional$intervals[[i]])
-  } 
-
   # create datasets for download
-  fullDownload <- download.data(input, fit, nJP=jpInd, yearvar, downloadtype="full")
-  graphDownload <- download.data(input, fit, nJP=jpInd, yearvar, downloadtype="graph", int.col = intervals)
-  
+  fullDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'full')
+  deathGraphDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'death')
+  survGraphDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'survive')
+
+  # create graphs
+  deathGraph <- getDeathByYear(filePath, jpsurvDataString, first_calc, com, interval, observed = obsintvar, use_default, deathGraphDownload)
+
   SelectedModel=getSelectedModel(filePath,jpsurvDataString,com)
   if (first_calc==TRUE||is.null(jpInd)) {
     jpInd=SelectedModel-1
@@ -360,7 +353,9 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
               "yod" = yod,
               "intervals" = intervals, 
               "yearVar" = yearVar,
-              "graphDownload" = graphDownload,
+              "deathData" = deathGraph,
+              "survGraphDownload" = survGraphDownload,
+              "deathGraphDownload" = deathGraphDownload,
               "fullDownload" = fullDownload) #returns
 
   exportJson <- toJSON(jsonl)
@@ -477,7 +472,7 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
   outputData=list("seerdata"=seerdata, "fittedResult"=fittedResult)
 
   # transform data to percent
-  outputData = toPercent(outputData, statistic)
+  # outputData = toPercent(outputData, statistic)
 
   iteration=jpsurvData$plot$static$imageId
   
@@ -986,6 +981,53 @@ fixIntGraph <- function(graph) {
   graph[[jpInd+1]]$pred_cum[1] <- graph[[jpInd+1]]$pred_cum[1] * 100
 
   graph
+}
+
+downloadDataWrapper <- function(jpsurvDataString, filePath, com, yearVar, jpInd, interval, downloadtype) {
+  jpsurvData <<- fromJSON(jpsurvDataString)
+  file = paste(filePath, paste("output-", jpsurvData$tokenId, "-", com, ".rds", sep = ""), sep = "/")
+  outputData = readRDS(file)    
+  input = outputData[['seerdata']]
+  fit = outputData[['fittedResult']]
+  yearvar = yearVar  
+  intervals = c()
+  if (downloadtype == 'survival') {
+    for (i in 1:length(jpsurvData$additional$intervals)) {
+      intervals = c(intervals,jpsurvData$additional$intervals[[i]])
+    } 
+    return (download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals))
+  } else if (downloadtype == 'death') {
+     for (i in 1:length(jpsurvData$additional$intervalsDeath)) {
+      intervals = c(intervals,jpsurvData$additional$intervalsDeath[[i]])
+    } 
+    return (download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals))
+  } else {
+    return (download.data(input, fit, jpInd, yearVar, downloadtype="full", interval = interval))
+  }
+}
+
+# Graphs the Death vs Year graph
+getDeathByYear <- function (filePath, jpsurvDataString, first_calc, com, interval, observed, use_default, graphDownload) {
+  jpsurvData <<- fromJSON(jpsurvDataString)
+  iteration = jpsurvData$plot$static$imageId
+  nJP = jpsurvData$additional$headerJoinPoints
+  if (first_calc == TRUE || is.null(nJP)) {
+    nJP = getSelectedModel(filePath, jpsurvDataString, com) - 1
+  }
+  data = paste(filePath, paste("output-", jpsurvData$tokenId,"-",com,".rds", sep=""), sep="/")
+  outputData = readRDS(data)
+  fit = outputData[['fittedResult']]
+  yearVar = getCorrectFormat(jpsurvData$calculate$static$yearOfDiagnosisVarName)
+  annotation = 0
+  if (nJP <= 3 && length(jpsurvData$additional$intervals) <= 3) {
+    annotation = 1
+  }
+  # create graph
+  graph = plot.dying.year.annotate(graphDownload, fit, nJP, yearVar, observed, predintvar="Predicted_Int", interval, annotation)
+  graphFile = paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
+  ggsave(file=paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
+
+  results = list("deathGraph" = graphFile, "deathData" = graphDownload)
 }
 
 #########################################################################################################

@@ -214,14 +214,17 @@ function addEventListeners() {
   //  file_submit(event);
   //});
 
-
-  $( "#recalculate" ).click(function() {
+  // recalculate button
+  Array.prototype.map.call(document.querySelectorAll("#recalculate"), function(link) {
+    link.onclick = function(event) {
+    event.preventDefault(); 
     jpsurvData.additional.recalculate="true"
     jpsurvData.additional.use_default="false"
     setCalculateData();
     jpsurvData.additional.use_default="true"
     updateSelectedIntervalYears();
-  });
+    }
+  })
 
   $( "#year-of-diagnosis" ).change(function() {
     //console.log("click event fired, changing to "+ $( "#year-of-diagnosis" ).val() )
@@ -855,16 +858,22 @@ function updateGraphs(token_id) {
 
   //Populate graph-year
   $("#graph-year-tab").find( "img" ).show();
-  $("#graph-year-tab").find( "img" ).css("width","65%");
+  $("#graph-year-tab").find( "img" ).css("width","90%");
   $("#graph-year-tab").find( "img" ).attr("src", "tmp/plot_Year-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
   $("#graph-year-table > tbody").empty();
   $("#graph-year-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
+  //Populate death-year
+  $("#graph-death-tab").find( "img" ).show();
+  $("#graph-death-tab").find( "img" ).css("width","90%");
+  $("#graph-death-tab").find( "img" ).attr("src", "tmp/plot_Death-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
+  $("#graph-death-table > tbody").empty();
+  $("#graph-death-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
+
   //Populate time-year
   $("#graph-time-tab").find( "img" ).show();
-  $("#graph-time-tab").find( "img" ).css("width","70%");
+  $("#graph-time-tab").find( "img" ).css("width","90%");
   $("#graph-time-tab").find( "img" ).attr("src", "tmp/plot_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
-
 
   var row;
 
@@ -1564,6 +1573,12 @@ function getIntervals() {
     jpsurvData.additional.intervals[index] = parseInt(value);
   });
 
+  var intervalsDeath = $('#interval-years-death').val()
+  jpsurvData.additional.intervalsDeath = [];
+  $.each(intervalsDeath, function(index, value) {
+    jpsurvData.additional.intervalsDeath[index] = parseInt(value);
+  });
+
 }
 
 
@@ -1709,6 +1724,7 @@ jpsurvData.additional.intervals_default = [];
     var intervals = jpsurvData.calculate.form.interval;
     var selectedRange = jpsurvData.calculate.form.yearOfDiagnosisRange[1] - jpsurvData.calculate.form.yearOfDiagnosisRange[0];
     $("#interval-years").empty();
+    $("#interval-years-death").empty();
     $("#trends-interval-years").empty();
 
   if(control_data.input_type==undefined){
@@ -1730,8 +1746,10 @@ jpsurvData.additional.intervals_default = [];
     for (var i = 1; i <= intervals; i++) {
       if($.inArray(i, years) >= 0) {
         $("#interval-years").append($("<option>").attr("selected", "selected").text(i));
+        $("#interval-years-death").append($("<option>").attr("selected", "selected").text(i));    
       } else {
         $("#interval-years").append($("<option>").text(i));
+        $("#interval-years-death").append($("<option>").text(i));
       }
       if ((intervals < 5 && i === intervals) ||
            i === 5) {
@@ -1750,8 +1768,10 @@ jpsurvData.additional.intervals_default = [];
       for (var i = 0; i < intervals.length; i++) {
         if($.inArray(intervals[i], years) >= 0) {
           $("#interval-years").append($("<option>").attr("selected", "selected").text(intervals[i]));
+          $("#interval-years-death").append($("<option>").attr("selected", "selected").text(intervals[i]));
         } else {
           $("#interval-years").append($("<option>").text(intervals[i]));
+          $("#interval-years-death").append($("<option>").text(intervals[i]));
         }
         if ((intervals[intervals.length -1] < 5 && i === intervals.length -1) ||
              intervals[i] === 5) {
@@ -1771,6 +1791,13 @@ function updateSelectedIntervalYears() {
     selectedText = selectedIntervalYears.join(', ');
   }
   $('#selected-interval-years').text(selectedText);
+
+  var selectedIntervalYears = $("#interval-years-death").val();
+  var selectedText = '';
+  if (selectedIntervalYears && selectedIntervalYears.length > 0) {
+    selectedText = selectedIntervalYears.join(', ');
+  }
+  $('#selected-interval-years-death').text(selectedText);
 }
 
 function getNumberOfIntervals() {
