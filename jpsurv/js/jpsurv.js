@@ -1900,8 +1900,8 @@ function set_intervals_from_diagnosis() {
   for(i=1; i<control_data.VarFormatSecList.Interval.ItemNameInDic.length; i++) {
     $("#intervals_from_diagnosis").append("<OPTION value=" +
     control_data.VarFormatSecList.Interval.ItemNameInDic[i] + ">" +
-    control_data.VarFormatSecList.Interval.ItemNameInDic[i] + "=" +
-    control_data.VarFormatSecList.Interval.ItemValueInDic[i] + "</OPTION>");
+    control_data.VarFormatSecList.Interval.ItemNameInDic[i] + " (" +
+    control_data.VarFormatSecList.Interval.ItemValueInDic[i] + ")</OPTION>");
   }
 
   $("#intervals_from_diagnosis").change(function() {
