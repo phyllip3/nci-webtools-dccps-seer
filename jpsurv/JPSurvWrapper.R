@@ -283,7 +283,7 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
   varLabels=getCorrectFormat(allVars)
   intervalRange = as.integer(jpsurvData$calculate$form$interval)
   statistic=jpsurvData$additional$DataTypeVariable
-  subsetStr <- getSubsetStr(yearOfDiagnosisVarName, yearOfDiagnosisRange, cohortVars, cohortValues)
+  subsetStr <<- getSubsetStr(yearOfDiagnosisVarName, yearOfDiagnosisRange, cohortVars, cohortValues)
   if (type=="dic") {
     file_name=paste(tokenId,seerFilePrefix, sep="" )
     file=paste(filePath, file_name, sep="/" )
