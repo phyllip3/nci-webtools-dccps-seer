@@ -742,9 +742,9 @@ download.data<-function(input,fit,nJP,yearvar,downloadtype,subset=NULL,interval=
   if(downloadtype=="full"){
     merge.data[,yearvar]<-output.sub[,yearvar]
     merge.data[,interval]<-output.sub[,interval]
-    subsetStr.list<-strsplit(subsetStr, " & ")
-    subsetStr.list[[1]]<-subsetStr.list[[1]][which(grepl("==", subsetStr.list[[1]])==T)]
-    cohort.list<-strsplit(subsetStr.list[[1]], "==")
+    subset.list<-strsplit(subset, " & ")
+    subset.list[[1]]<-subset.list[[1]][which(grepl("==", subset.list[[1]])==T)]
+    cohort.list<-strsplit(subset.list[[1]], "==")
     cohort.vars<-sapply(cohort.list, "[", 1)
     cohort.vars<-gsub(" ","",cohort.vars)
     cohort.values<-sapply(cohort.list, "[", 2)
