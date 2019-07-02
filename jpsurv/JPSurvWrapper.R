@@ -664,14 +664,14 @@ downloadDataWrapper <- function(jpsurvDataString, filePath, com, yearVar, jpInd,
     for (i in 1:length(jpsurvData$additional$intervals)) {
       intervals = c(intervals,jpsurvData$additional$intervals[[i]])
     } 
-    return (download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals, subsetStr = subsetStr))
+    return (download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals, subset = subsetStr))
   } else if (downloadtype == 'death') {
      for (i in 1:length(jpsurvData$additional$intervalsDeath)) {
       intervals = c(intervals,jpsurvData$additional$intervalsDeath[[i]])
     } 
-    return (download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals, subsetStr = subsetStr))
+    return (download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals, subset = subsetStr))
   } else {
-    return (download.data(input, fit, jpInd, yearVar, downloadtype="full", interval = interval, subsetStr = subsetStr))
+    return (download.data(input, fit, jpInd, yearVar, downloadtype="full", interval = interval, subset = subsetStr))
   }
 }
 
@@ -715,8 +715,8 @@ getDeathByYearWrapper <- function (filePath, jpsurvDataString, first_calc, com, 
 # interval - the variable name for year since diagnosis. The default is 'Interval'.
 # int.col - the interval values selected for the plot if the downloadtype="graph". The default is NULL.
 #########################################################################################################
-download.data<-function(input,fit,nJP,yearvar,downloadtype,subsetStr,interval="Interval",int.col=NULL){
-  input.sub<-subset(input,eval(parse(text=subsetStr)))
+download.data<-function(input,fit,nJP,yearvar,downloadtype,subset=NULL,interval="Interval",int.col=NULL){
+  input.sub<-subset(input,eval(parse(text=subset)))
   if(downloadtype=="graph"){
     output.sub<-fit$FitList[[nJP+1]]$predicted
     if(!is.null(int.col)){
