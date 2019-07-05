@@ -884,8 +884,8 @@ function updateGraphs(token_id) {
   yodVarName = yodVarName.replace(/__/g, '_');
 
   //Add the Year Table
-  if(jpsurvData.results.YearData.RelSurvYearData!=undefined){
-    var yod = jpsurvData.results.YearData.RelSurvYearData[yodVarName];
+  if(jpsurvData.results.yearData.yearTable!=undefined){
+    var yod = jpsurvData.results.yearData.yearTable[yodVarName];
     header = [];
     $.each(jpsurvData.calculate.form.cohortVars, function(index, value) {
       header.push(value);
@@ -933,24 +933,24 @@ function updateGraphs(token_id) {
         row += "<td>"+value+"</td>";
 
         if(jpsurvData.results.input_type=="dic"){
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData.Interval[index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData.Died[index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData.Alive_at_Start[index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData.Lost_to_Followup[index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData.Expected_Survival_Interval[index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable.Interval[index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable.Died[index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable.Alive_at_Start[index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable.Lost_to_Followup[index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable.Expected_Survival_Interval[index]);
         }
         else if(jpsurvData.results.input_type=="csv"){
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData[jpsurvData.results.headers.Interval][index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData[jpsurvData.results.headers.Died][index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData[jpsurvData.results.headers.Alive_at_Start][index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData[jpsurvData.results.headers.Lost_to_followup][index]);
-          row += formatCell(jpsurvData.results.YearData.RelSurvYearData[jpsurvData.results.headers.Expected_Survival_Interval][index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable[jpsurvData.results.headers.Interval][index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable[jpsurvData.results.headers.Died][index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable[jpsurvData.results.headers.Alive_at_Start][index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable[jpsurvData.results.headers.Lost_to_followup][index]);
+          row += formatCell(jpsurvData.results.yearData.yearTable[jpsurvData.results.headers.Expected_Survival_Interval][index]);
         }
-        row += formatCell(jpsurvData.results.YearData.RelSurvYearData[type][index]);
-        row += formatCell(jpsurvData.results.YearData.RelSurvYearData.pred_int[index])
-        row += formatCell(jpsurvData.results.YearData.RelSurvYearData.pred_cum[index]);
-        row += formatCell(jpsurvData.results.YearData.RelSurvYearData.pred_int_se[index]);
-        row += formatCell(jpsurvData.results.YearData.RelSurvYearData.pred_cum_se[index])+"</tr>/n";
+        row += formatCell(jpsurvData.results.yearData.yearTable[type][index]);
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Int[index])
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Cum[index]);
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Int_SE[index]);
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Cum_SE[index])+"</tr>/n";
         $("#graph-year-table > tbody").append(row);
         rows++;
       });
@@ -3105,13 +3105,14 @@ function genereateSheet(data) {
 }
 
 function downloadData(type) {
-  var survByYear = jpsurvData.results.survGraphDownload;
+  var survByYear = jpsurvData.results.yearData.yearTable;
   var survByTime = jpsurvData.results.IntData.RelSurIntData;
   var fullPred = jpsurvData.results.fullDownload;
   var cohort = document.querySelector('#cohort-display').value;
+  var jp = jpsurvData.results.jpInd;
   var wb = XLSX.utils.book_new();
   wb.props = {
-    Title: type + ' - ' + cohort 
+    Title: type + ' - Model ' + (jp+1) + ' (JP ' + jp + ') - ' + cohort 
   };
   
   if (type == 'survByYear') {
