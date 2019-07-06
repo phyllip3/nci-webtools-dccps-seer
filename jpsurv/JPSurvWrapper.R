@@ -202,7 +202,7 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
         interval="Interval"
         input_type="dic"
   }
-  IntGraph=getRelativeSurvivalByIntWrapper(filePath,jpsurvDataString,first_calc,com,interval,observed,use_default)
+  # IntGraph=getRelativeSurvivalByIntWrapper(filePath,jpsurvDataString,first_calc,com,interval,observed,use_default)
   ModelSelection=geALLtModelWrapper(filePath,jpsurvDataString,com)
   Coefficients=getcoefficientsWrapper(filePath,jpsurvDataString,first_calc,com)
   JP=getJPWrapper(filePath,jpsurvDataString,first_calc,com)
@@ -222,10 +222,12 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
   # create datasets for download
   fullDownload <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'full')
   deathGraphData <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'death')
-  survGraphData <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'survive')
+  survGraphData <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'year')
+  timeGraphData <- downloadDataWrapper(jpsurvDataString, filePath, com, yearVar, jpInd, interval, 'time')
   # create graphs
-  deathGraph <- getGraphWrapper(filePath, jpsurvDataString, first_calc, com, interval, deathGraphData, 'death')
-  yearGraph <- getGraphWrapper(filePath, jpsurvDataString, first_calc, com, interval, survGraphData, 'year')
+  deathGraph <- getGraphWrapper(filePath, jpsurvDataString, first_calc, com, interval, deathGraphData, 'death', statistic)
+  yearGraph <- getGraphWrapper(filePath, jpsurvDataString, first_calc, com, interval, survGraphData, 'year', statistic)
+  timeGraph <- getGraphWrapper(filePath, jpsurvDataString, first_calc, com, interval, timeGraphData, 'time', statistic)
 
   SelectedModel=getSelectedModel(filePath,jpsurvDataString,com)
   if (first_calc==TRUE||is.null(jpInd)) {
@@ -237,7 +239,8 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
     yod=jpsurvData$additional$yearOfDiagnosis_default
     intervals=jpsurvData$additional$intervals_default
   }
-  jsonl =list("IntData" = IntGraph,
+  jsonl =list(
+          # "IntData" = IntGraph,
               "Coefficients" = Coefficients,
               "ModelSelection" = ModelSelection, 
               "JP" = JP,
@@ -254,6 +257,7 @@ getAllData<- function(filePath,jpsurvDataString,first_calc=FALSE,use_default=TRU
               "yearVar" = yearVar,
               "deathData" = deathGraph,
               "yearData" = yearGraph,
+              "timeData" = timeGraph,
               "fullDownload" = fullDownload) #returns
   exportJson <- toJSON(jsonl)
   filename = paste(filePath, paste("results-", jpsurvData$tokenId,"-",com,"-",jpInd, ".json", sep=""), sep="/") 
@@ -334,9 +338,6 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
   cat("***outputFileName")
   cat(outputFileName)
   outputData=list("seerdata"=seerdata, "fittedResult"=fittedResult)
-  # transform data to percent
-  outputData = scaleTo(outputData, 'percent')
-  iteration=jpsurvData$plot$static$imageId
   saveRDS(outputData, outputFileName)
 }
 
@@ -506,8 +507,8 @@ getRunsString<-function(filePath,jpsurvDataString){
   return (runs)
 }
 
-# modify data scaling by 100 for display as percentage or calculation
-scaleTo <- function(data, type) {
+# scalar multiply data by 100 for display as a percentage
+scaleTo <- function(data) {
   columns = c('Observed_Survival_Cum', 
               'Observed_Survival_Interval', 
               'Expected_Survival_Interval',
@@ -531,26 +532,8 @@ scaleTo <- function(data, type) {
               'pred_int',
               'pred_int_se')
   for (col in columns) {
-    if (type == 'percent') { # scale input and output data by 100 to display as percent
-      if (!is.null(data$seerdata[[col]])) {
-        data$seerdata[[col]] <- data$seerdata[[col]] * 100
-      }
-      for (nJP in 1:length(data$fittedResult$FitList)) {
-         if (!is.null(data$fittedResult$FitList[[nJP]]$predicted[[col]])) {
-          data$fittedResult$FitList[[nJP]]$predicted[[col]] <- data$fittedResult$FitList[[nJP]]$predicted[[col]] * 100
-          data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] <- data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] * 100
-        }
-      }
-    } else { # scale back to decimal for plotting graphs
-      if (!is.null(data[[col]])) {
-        data[[col]] <- data[[col]] / 100
-      }
-      for (nJP in 1:length(data$fittedResult$FitList)) {
-         if (!is.null(data$fittedResult$FitList[[nJP]]$predicted[[col]])) {
-          data$fittedResult$FitList[[nJP]]$predicted[[col]] <- data$fittedResult$FitList[[nJP]]$predicted[[col]] / 100
-          data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] <- data$fittedResult$FitList[[nJP]]$fullpredicted[[col]] / 100
-        }
-      }
+    if (!is.null(data[[col]])) {
+      data[[col]] <- data[[col]] * 100
     }
   }
   return(data)
@@ -575,7 +558,7 @@ downloadDataWrapper <- function(jpsurvDataString, filePath, com, yearVar, jpInd,
   cohortValues = jpsurvData$calculate$form$AllcohortValues
   subsetStr = getSubsetStr(yearVar, yearOfDiagnosisRange, cohortVars, cohortValues)
   intervals = c()
-  if (downloadtype == 'survive') {
+  if (downloadtype == 'year') {
     for (i in 1:length(jpsurvData$additional$intervals)) {
       intervals = c(intervals,jpsurvData$additional$intervals[[i]])
     } 
@@ -583,15 +566,20 @@ downloadDataWrapper <- function(jpsurvDataString, filePath, com, yearVar, jpInd,
   } else if (downloadtype == 'death') {
      for (i in 1:length(jpsurvData$additional$intervalsDeath)) {
       intervals = c(intervals,jpsurvData$additional$intervalsDeath[[i]])
-    } 
-    return(download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals, subset = subsetStr))
+      } 
+      return(download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = intervals, subset = subsetStr))
+  } else if (downloadtype == 'time') {
+      intervalRange = as.integer(jpsurvData$calculate$form$interval)
+      range = (c(1:intervalRange))
+      return(download.data(input, fit, jpInd, yearVar, downloadtype="graph", interval = interval, int.col = range, subset = subsetStr))
   } else {
-    return(download.data(input, fit, jpInd, yearVar, downloadtype="full", interval = interval, subset = subsetStr))
+      fullData = download.data(input, fit, jpInd, yearVar, downloadtype="full", interval = interval, subset = subsetStr)
+      return(scaleTo(fullData))
   }
 }
 
-# Graphs the Death vs Year graph
-getGraphWrapper <- function (filePath, jpsurvDataString, first_calc, com, interval, graphData, type) {
+# creates graphs
+getGraphWrapper <- function (filePath, jpsurvDataString, first_calc, com, interval, graphData, type, statistic) {
   jpsurvData <<- fromJSON(jpsurvDataString)
   iteration = jpsurvData$plot$static$imageId
   yearVar = getCorrectFormat(jpsurvData$calculate$static$yearOfDiagnosisVarName)
@@ -599,30 +587,46 @@ getGraphWrapper <- function (filePath, jpsurvDataString, first_calc, com, interv
   if (first_calc == TRUE || is.null(nJP)) {
     nJP = getSelectedModel(filePath, jpsurvDataString, com) - 1
   }
-  # scale data back to decimal
   data = paste(filePath, paste("output-", jpsurvData$tokenId,"-",com,".rds", sep=""), sep="/")
   outputData = readRDS(data)
-  scaleOutput = scaleTo(outputData, 'decimal')
-  fit = scaleOutput[['fittedResult']]
-  scaleGraph = scaleTo(graphData, 'decimal')
+  fit = outputData[['fittedResult']]
+  obsintvar = "Relative_Survival_Interval"
+  predintvar = "Predicted_Int"
+  obscumvar = "Relative_Survival_Cum"
+  predcumvar = "Predicted_Cum"
+  if (statistic == 'CauseSpecific_Survival_Cum') {
+    obsintvar = "CauseSpecific_Survival_Interval"
+    obscumvar = "CauseSpecific_Survival_Cum"
+  }
+
   annotation = 0
   # create graph
   if (type == 'death') {
     if (nJP <= 3 && length(jpsurvData$additional$intervalsDeath) <= 3) {
       annotation = 1
     } 
-    graph = plot.dying.year.annotate(scaleGraph, fit, nJP, yearVar, obsintvar="Relative_Survival_Interval", predintvar="Predicted_Int", interval, annotation)
-    graphFile = paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
-    ggsave(file=paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
-    results = list("deathGraph" = graphFile, "deathTable" = graphData)
-  } else {
-    if (nJP <= 3 && length(jpsurvData$additional$intervals) <= 3) {
-      annotation = 1
+      graph = plot.dying.year.annotate(graphData, fit, nJP, yearVar, obsintvar, predintvar, interval, annotation)
+      graphFile = paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
+      ggsave(file=paste(filePath, paste("plot_Death-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
+      graphData = scaleTo(graphData)
+      results = list("deathGraph" = graphFile, "deathTable" = graphData)
+  } else if (type == 'year') {
+      if (nJP <= 3 && length(jpsurvData$additional$intervals) <= 3) {
+        annotation = 1
     } 
-    graph = plot.surv.year.annotate(scaleGraph, fit, nJP, yearVar, obscumvar="Relative_Survival_Cum", predcumvar="Predicted_Cum", interval, annotation)
-    graphFile = paste(filePath, paste("plot_Year-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
-    ggsave(file=paste(filePath, paste("plot_Year-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
-    results = list("yearGraph" = graphFile, "yearTable" = graphData)
+      graph = plot.surv.year.annotate(graphData, fit, nJP, yearVar, obscumvar, predcumvar, interval, annotation)
+      graphFile = paste(filePath, paste("plot_Year-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
+      ggsave(file=paste(filePath, paste("plot_Year-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
+      graphData = scaleTo(graphData)
+      results = list("yearGraph" = graphFile, "yearTable" = graphData)
+  } else if (type == 'time') {
+      years = jpsurvData$additional$yearOfDiagnosis
+      graph = plot.surv.int.multiyears(graphData, fit, nJP, yearVar, obscumvar, predcumvar, interval, year.col = years)
+      graphFile = paste(filePath, paste("plot_Int-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/")
+      ggsave(file=paste(filePath, paste("plot_Int-", jpsurvData$tokenId,"-",com,"-",nJP,"-",iteration,".png", sep=""), sep="/"), plot = graph)
+      graphData = scaleTo(graphData)
+      graphData = graphData[graphData[[yearVar]] %in% years,]
+      results = list("timeGraph" = graphFile, "timeTable" = graphData)
   }
   return(results)
 }
@@ -1106,4 +1110,51 @@ plot.surv.year.annotate<-function(plotdata,fit,nJP,yearvar,obscumvar="Relative_S
       theme(plot.title = element_text(hjust = 0.5))
   }
   return(plot)
+}
+
+#########################################################################################################
+# plot.surv.int.multiyears: a function that returns a plot for Cumulative Survival by Interval supporting
+# multiple selected years
+# arguments:
+# plotdata - 1. the graph data returned by function download.data with downloadtype="graph" and all intervals needed for int.col.
+#            2. the full data returned by function download.data with downloadtype="full".
+#            Either of the above would work.
+# fit - joinpoint object containing the model output.
+# nJP - the number of joinpoints in the model.
+# yearvar - the variable name for year of diagnosis used in argument 'year' of the function joinpoint.
+# obscumvar - the variable name for observed relative cumulative survival. The default is "Relative_Survival_Cum"
+#             for relative survival data. For cause-specific data, it needs to be changed accordingly.
+# predcumvar - the variable name for predicted cumulative survival. The default is "Predicted_Cum".
+# interval - the variable name for year since diagnosis. The default is 'Interval'.
+# year.col - the year values selected for the plot. The default is NULL.
+#########################################################################################################
+
+### define a plot function for Cumulative Survival by Interval
+plot.surv.int.multiyears<-function(plotdata,fit,nJP,yearvar,obscumvar="Relative_Survival_Cum",predcumvar="Predicted_Cum",interval="Interval",year.col=NULL){
+  year.col.str<- paste(year.col,collapse=", ",sep="")
+  if(length(year.col)<=3){
+    title.survint<-paste("Cumulative Survival by Interval for ",year.col.str,sep="")
+  }else{
+    title.survint<-"Cumulative Survival by Interval"
+  }
+  plotdata.sub<-plotdata[which((plotdata[,yearvar] %in% year.col) & !is.na(plotdata[,obscumvar])),]
+  int.max<-max(plotdata.sub[,interval],na.rm=T)
+  if(int.max<=12){
+    xbreaks.by<-1
+  }else{
+    xbreaks.by<-2
+  }
+  plot<-ggplot(data=plotdata.sub, aes(x=plotdata.sub[,interval], y=plotdata.sub[,predcumvar],group=as.factor(plotdata.sub[,yearvar]), colour=as.factor(plotdata.sub[,yearvar]))) + 
+    geom_line(data=plotdata.sub, aes(x=plotdata.sub[,interval], y=plotdata.sub[,predcumvar],group=as.factor(plotdata.sub[,yearvar]), colour=as.factor(plotdata.sub[,yearvar])),linetype="solid")+
+    geom_point(data=plotdata.sub, aes(x=plotdata.sub[,interval], y=plotdata.sub[,obscumvar], group=as.factor(plotdata.sub[,yearvar]), colour=as.factor(plotdata.sub[,yearvar])))+
+    xlab('Interval') + ylab('Cumulative Survival (%)')+
+    theme_bw()+
+    ggtitle(title.survint) +
+    coord_cartesian(ylim=c(0,1))+
+    scale_y_continuous(breaks=seq(0,1,0.1),labels = scales::percent)+
+    scale_x_continuous(breaks=seq(min(plotdata.sub[,interval],na.rm=T),max(plotdata.sub[,interval],na.rm=T),xbreaks.by))+
+    scale_color_hue(labels = year.col)+
+    theme(legend.position="bottom")+
+    theme(legend.title=element_blank())+
+    theme(plot.title = element_text(hjust = 0.5))
 }
