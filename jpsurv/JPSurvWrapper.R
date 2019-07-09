@@ -281,8 +281,6 @@ getFittedResult <- function (tokenId,filePath, seerFilePrefix, yearOfDiagnosisVa
   intervalRange = as.integer(jpsurvData$calculate$form$interval)
   statistic=jpsurvData$additional$DataTypeVariable
   subsetStr <<- getSubsetStr(yearOfDiagnosisVarName, yearOfDiagnosisRange, cohortVars, cohortValues)
-  print('check env: ')
-  print(environment())
   if (type=="dic") {
     file_name=paste(tokenId,seerFilePrefix, sep="" )
     file=paste(filePath, file_name, sep="/" )
