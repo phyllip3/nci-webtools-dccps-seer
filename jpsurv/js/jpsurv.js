@@ -459,6 +459,7 @@ function preLoadValues() {
 
   setIntervalsDefault();
   getIntervals();
+  getAnnotation();
   stage2("no calculate"); // This is the initial calculation and setup.
   retrieveResults();
   var status = getUrlParameter('status');
@@ -1393,6 +1394,7 @@ function calculate(run) {
       if(send == true){
         setIntervalsDefault();
         getIntervals();
+        getAnnotation();
         setUrlParameter("request", "true");
         jpsurvData.additional.use_default="true"
         jpsurvData.queue.url = encodeURIComponent(window.location.href.toString());
@@ -1545,6 +1547,7 @@ function stage2(action) {
   jpsurvData.recentTrends = 0;
   setIntervalsDefault();
   getIntervals();
+  getAnnotation();
   jpsurvData.additional.yearOfDiagnosis[0] = jpsurvData.calculate.form.yearOfDiagnosisRange[0].toString();
   if(action == "calculate") {
     calculateFittedResults()
@@ -1564,6 +1567,7 @@ function stage3() {
   jpsurvData.recentTrends = 0;
   $("#year_of_diagnosis_start").val(jpsurvData.calculate.form.yearOfDiagnosisRange[0]);
   getIntervals();
+  getAnnotation();
   delete jpsurvData.results;
 
   calculateAllData();
@@ -1585,6 +1589,17 @@ function getIntervals() {
     jpsurvData.additional.intervalsDeath[index] = parseInt(value);
   });
 
+}
+
+function getAnnotation() {
+  jpsurvData.additional.yearAnnotation = 0;
+  jpsurvData.additional.deathAnnotation = 0;
+  if ($('#yearAnno').is(":checked")) {
+    jpsurvData.additional.yearAnnotation = 1;
+  }
+  if ($('#deathAnno').is(":checked")) {
+    jpsurvData.additional.deathAnnotation = 1;
+  }
 }
 
 

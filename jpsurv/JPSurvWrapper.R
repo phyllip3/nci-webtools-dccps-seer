@@ -538,7 +538,8 @@ getGraphWrapper <- function (filePath, jpsurvDataString, first_calc, com, interv
   annotation = 0
   # create graph
   if (type == 'death') {
-    if (nJP <= 3 && length(jpsurvData$additional$intervalsDeath) <= 3) {
+    anno = jpsurvData$additional$deathAnno
+    if (nJP <= 3 && length(jpsurvData$additional$intervalsDeath) <= 3 && anno == 1) {
       annotation = 1
     } 
       graph = plot.dying.year.annotate(graphData, fit, nJP, yearVar, obsintvar, predintvar, interval, annotation)
@@ -547,7 +548,8 @@ getGraphWrapper <- function (filePath, jpsurvDataString, first_calc, com, interv
       graphData = scaleTo(graphData)
       results = list("deathGraph" = graphFile, "deathTable" = graphData)
   } else if (type == 'year') {
-      if (nJP <= 3 && length(jpsurvData$additional$intervals) <= 3) {
+      anno = jpsurvData$additional$yearAnno
+      if (nJP <= 3 && length(jpsurvData$additional$intervals) <= 3 && anno == 1) {
         annotation = 1
     } 
       graph = plot.surv.year.annotate(graphData, fit, nJP, yearVar, obscumvar, predcumvar, interval, annotation)
