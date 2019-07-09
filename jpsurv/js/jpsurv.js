@@ -1955,10 +1955,15 @@ function set_year_of_diagnosis_select() {
 function set_intervals_from_diagnosis() {
   // start interval from 2 
   for(i=1; i<control_data.VarFormatSecList.Interval.ItemNameInDic.length; i++) {
+    if (i == control_data.VarFormatSecList.Interval.ItemNameInDic.length - 1) {
+      $("#intervals_from_diagnosis").append("<OPTION selected value=" +
+      control_data.VarFormatSecList.Interval.ItemNameInDic[i] + "> <= " +
+      control_data.VarFormatSecList.Interval.ItemNameInDic[i] + " years</OPTION>");
+    } else {
     $("#intervals_from_diagnosis").append("<OPTION value=" +
-    control_data.VarFormatSecList.Interval.ItemNameInDic[i] + ">" +
-    control_data.VarFormatSecList.Interval.ItemNameInDic[i] + " (" +
-    control_data.VarFormatSecList.Interval.ItemValueInDic[i] + ")</OPTION>");
+      control_data.VarFormatSecList.Interval.ItemNameInDic[i] + "> <= " +
+      control_data.VarFormatSecList.Interval.ItemNameInDic[i] + " years</OPTION>");
+    }
   }
 
   $("#intervals_from_diagnosis").change(function() {
