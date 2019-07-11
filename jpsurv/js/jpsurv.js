@@ -930,7 +930,7 @@ function updateGraphs(token_id) {
             }
           });
         }
-        var type = Object.keys(jpsurvData.results.timeData.timeTable)[2];
+        var type = jpsurvData.results.statistic
         row += "<td>"+value+"</td>";
 
         if(jpsurvData.results.input_type=="dic"){
