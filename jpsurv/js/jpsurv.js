@@ -25,6 +25,8 @@ $(document).ready(function() {
   addEventListeners();
   addMessages();
   hide_display_email();
+  // disable calculate button on document load
+  $('#calculate').prop("disabled",true);
   if (jpsurvData.status === 'uploaded') {
     $('#help').html('<div style="font-size:18px;">Please select Cohort and Model specifications on the left and click on Calculate / Submit.</div>');
   } else {
@@ -385,11 +387,7 @@ function addInputSection() {
     }
 
     $('#upload_file_submit_container').remove();
-
-
-
-
-
+    $('#calculate').prop("disabled",false);
   }
   else if (status=="failed_upload")
   {
