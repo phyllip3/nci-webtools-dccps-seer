@@ -45,10 +45,6 @@ $(document).ready(function() {
     })
   })
 
-  $([name='data']).prop("checked", true)
-
-  $("[name='data']:checked").click()
-
   /* Needed when the user hovers over the radio button without clicking the section for the File Formats,the tooltips */
   /* will not work                                                                                                    */
   $("#upload-form").hover(function(event) {
@@ -70,7 +66,7 @@ $(document).ready(function() {
     function(event) {
 
        $(this).tooltip({
-            delay: "1500",
+            delay: 500,
             title: txtForInputButtonToolTip,
             placement: "bottom",
        });
@@ -396,7 +392,7 @@ function addInputSection() {
     id="jpsurv"
     showMessage(id, message, message_type);
     $("#right_panel").hide();
-    $("#help").show();
+    $("#helpCard").show();
 
   }
   else if ( status=="failed_import")
@@ -410,7 +406,7 @@ function addInputSection() {
     id="jpsurv"
     showMessage(id, message, message_type);
     $("#right_panel").hide();
-    $("#help").show();
+    $("#helpCard").show();
     var inputData = load_ajax("input_" + jpsurvData.tokenId + ".json");
 
     //console.warn("inputData");
@@ -726,7 +722,7 @@ function checkInputFiles() {
       var error_msg="Please choose 1 dictionary file and one text file"
       $("#file_display").empty();
 
-      $("#upload_file_submit").text('Upload Input Files');
+      // $("#upload_file_submit").text('Upload Input Files');
 
       if($("#file_control").prop("files").length>2)
         $("#file_display").html('<span style="color:red">'+error_msg+'</span></br>');
@@ -749,7 +745,6 @@ function checkInputFiles() {
       var numberOfFiles = $("#file_control").prop("files").length
       if(numberOfFiles == 2 && has_dic==true &&  has_txt==true) {
         $("#upload_file_submit").removeAttr('disabled');
-        $("#upload_file_submit").text('Upload Input Files');
         $("#upload_file_submit").on("click", submitDicOrCsv)
       } else if (numberOfFiles == 1) {
         $("#file_display").html('<span style="color:red">'+error_msg+'</span></br>');
@@ -760,7 +755,6 @@ function checkInputFiles() {
     else if($('#csv').is(':checked')){
 
       $("#upload_file_submit").attr('title', 'Upload Data from CSV File');
-      $("#upload_file_submit").text('Upload Input Files');
 
       if(file_control_csv.length > 0 &&jpsurvData.passed==true) {
         $("#upload_file_submit").removeAttr('disabled');
@@ -775,7 +769,7 @@ function checkInputFiles() {
     else if ( $("#importRadioButton").is(":checked")) {
 
         $("#upload_file_submit").attr('title', 'Import Workspace from file');
-        $("#upload_file_submit").text('Import Workspace');
+        $("#upload_file_submit").text('Import');
 
         if ( $("#fileSelect")[0].files.length == 1 ) {
             $("#upload_file_submit").removeAttr('disabled');
@@ -856,21 +850,18 @@ function updateGraphs(token_id) {
 
   //Populate graph-year
   $("#graph-year-tab").find( "img" ).show();
-  $("#graph-year-tab").find( "img" ).css("width","70%");
   $("#graph-year-tab").find( "img" ).attr("src", "tmp/plot_Year-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
   $("#graph-year-table > tbody").empty();
   $("#graph-year-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
   //Populate death-year
   $("#graph-death-tab").find( "img" ).show();
-  $("#graph-death-tab").find( "img" ).css("width","70%");
   $("#graph-death-tab").find( "img" ).attr("src", "tmp/plot_Death-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
   $("#graph-death-table > tbody").empty();
   $("#graph-death-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
   //Populate time-year
   $("#graph-time-tab").find( "img" ).show();
-  $("#graph-time-tab").find( "img" ).css("width","70%");
   $("#graph-time-tab").find( "img" ).attr("src", "tmp/plot_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
 
   var row;
@@ -1205,7 +1196,7 @@ function calculateFittedResultsCallback() {
   //console.log("calculateFittedResultsCallback..");
   $("#right_panel").show();
   $("#right_panel").css('display', 'inline-block');
-  $("#help").hide();
+  $("#helpCard").hide();
   $("#icon").css('visibility', 'visible');
   Slide_menu_Horz('hide');
 
@@ -1432,7 +1423,7 @@ function calculate(run) {
       //  jpsurvData.additional.rates=control.rates
         var params = getParams();
         $("#right_panel").hide();
-        $("#help").show();
+        $("#helpCard").show();
         $("#icon").css('visibility', 'hidden');
         var comm_results = JSON.parse(jpsurvRest('stage5_queue', params));
         $("#calculating-spinner").modal('hide');
@@ -2083,27 +2074,19 @@ function jpsurvRest2(action, callback) {
   var params = getParams();
 
   $("#calculating-spinner").modal('show');
-  //console.log('jpsurvRest2');
-  //console.info(params);
   var url = 'jpsurvRest/' + action + '?jpsurvData=' + encodeURIComponent(params.substring(params.indexOf('{')));
-  var ajaxRequest = $.ajax({
+  return $.ajax({
     type : 'GET',
     url : url,
-    contentType : 'application/json' // JSON
-  });
-  ajaxRequest.success(function(data) {
-    //console.log("Success");
+    contentType : 'application/json'
+  }).done(function(msg) {
     window[callback]();
     scrollIntervalYearDropdown();
-  });
-  ajaxRequest.error(function(jqXHR, textStatus) {
+    $("#calculating-spinner").modal('hide');
+  }).fail(function(jqXHR, textStatus) {
     $("#calculating-spinner").modal('hide');
     displayCommFail("jpsurv", jqXHR, textStatus);
   });
-  ajaxRequest.done(function(msg) {
-    $("#calculating-spinner").modal('hide');
-  });
-
 }
 
 function displayCommFail(id, jqXHR, textStatus) {
@@ -2181,7 +2164,7 @@ function showMessage(id, message, message_type) {
   //  Display either a warning an error.
   //
   $("#right_panel").show();
-  $("#help").hide();
+  $("#helpCard").hide();
   $("#icon").css('visibility', 'visible');
 
   //console.log("Show Message");
@@ -2468,39 +2451,27 @@ function displayError(id, data) {
   return error;
 }
 
+
 function getRestServerStatus() {
-
   var id = "jpsurv-help";
-
-  //console.log("getRestServerStatus");
-
-
-
   var url = "jpsurvRest/status";
-  var ajaxRequest = $.ajax({
+
+  return $.ajax({
     url : url,
     async :false,
-    contentType : 'application/json' // JSON
-  });
-  ajaxRequest.success(function(data) {
-
+    contentType : 'application/json' ,
+  }).done(function(data) {
     $("#"+id+"-message-container").hide();
     if (displayError(id, data) == false) {
-
       $("#upload-form").submit();
     }
-  });
-  ajaxRequest.fail(function(jqXHR, textStatus) {
+  }).fail(function(jqXHR, textStatus) {
     //console.log("ajaxRequetst.fail");
     //console.dir(jqXHR);
     //console.log(textStatus);
-    displayCommFail(id, jqXHR, textStatus);
-  });
-    ajaxRequest.error(function(jqXHR, textStatus) {
     $("#calculating-spinner").modal('hide');
-    displayCommFail("jpsurv", jqXHR, textStatus);
+    displayCommFail(id || 'jquery', jqXHR, textStatus);
   });
-
 }
 
 function certifyResults() {
