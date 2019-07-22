@@ -163,6 +163,11 @@ input[type="file"] {
     cursor: pointer;
 }
 
+.fa-caret-left {
+  color: #337ab7;
+  cursor: pointer;
+}
+
 .fa-spin {
   color: #337ab7;
   display: block;
@@ -606,6 +611,11 @@ html body footer {
   margin-top: 2rem;
   margin-bottom: 2rem;
 } */
+
+.mr-5 {
+  margin-right: 5rem;
+}
+
 
 @media(min-width: 1440px){
   .container {

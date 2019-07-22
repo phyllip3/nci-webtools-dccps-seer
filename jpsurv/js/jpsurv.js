@@ -936,10 +936,10 @@ function updateGraphs(token_id) {
           row += formatCell(jpsurvData.results.yearData.yearTable[jpsurvData.results.headers.Expected_Survival_Interval][index]);
         }
         row += formatCell(jpsurvData.results.yearData.yearTable[type][index]);
-        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Int[index])
-        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Cum[index]);
-        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Int_SE[index]);
-        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Cum_SE[index])+"</tr>/n";
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Survival_Int[index])
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Survival_Cum[index]);
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Survival_Int_SE[index]);
+        row += formatCell(jpsurvData.results.yearData.yearTable.Predicted_Survival_Cum_SE[index])+"</tr>/n";
         $("#graph-year-table > tbody").append(row);
         rows++;
       });
@@ -1005,7 +1005,7 @@ function updateGraphs(token_id) {
         row += formatCell(jpsurvData.results.timeData.timeTable[jpsurvData.results.headers.Interval]);
         row += formatCell(jpsurvData.results.timeData.timeTable[jpsurvData.results.headers[jpsurvData.results.statistic]]);
       }
-      row += formatCell(jpsurvData.results.timeData.timeTable.Predicted_Cum)+"</tr>/n";
+      row += formatCell(jpsurvData.results.timeData.timeTable.Predicted_Survival_Cum)+"</tr>/n";
       $("#graph-time-table > tbody").append(row);
       rows++;
     } else if (yod) {
@@ -1042,7 +1042,7 @@ function updateGraphs(token_id) {
           row += formatCell(jpsurvData.results.timeData.timeTable[jpsurvData.results.headers.Interval][index]);
           row += formatCell(jpsurvData.results.timeData.timeTable[jpsurvData.results.headers[jpsurvData.results.statistic]][index]);
         }
-        row += formatCell(jpsurvData.results.timeData.timeTable.Predicted_Cum[index])+"</tr>/n";
+        row += formatCell(jpsurvData.results.timeData.timeTable.Predicted_Survival_Cum[index])+"</tr>/n";
         $("#graph-time-table > tbody").append(row);
         rows++;
 
@@ -2073,6 +2073,7 @@ function build_output_format_column() {
 function jpsurvRest2(action, callback) {
   var params = getParams();
 
+  $("#calculating-spinner").modal({ backdrop:'static'})
   $("#calculating-spinner").modal('show');
   var url = 'jpsurvRest/' + action + '?jpsurvData=' + encodeURIComponent(params.substring(params.indexOf('{')));
   return $.ajax({
@@ -3072,10 +3073,13 @@ function genereateSheet(data) {
               'Relative_Survival_Cum',
               'Relative_SE_Interval',
               'Relative_SE_Cum',
-              'Predicted_Int',
-              'Predicted_Cum',
-              'Predicted_Int_SE',
-              'Predicted_Cum_SE'];
+              'Predicted_Survival_Int',
+              'Predicted_ProbDeath_Int',
+              'Predicted_Survival_Cum',
+              'Predicted_Survival_Int_SE',
+              'Predicted_ProbDeath_Int_SE',
+              'Predicted_Survival_Cum_SE',
+            ];
   } else {
     input = [ yearVar,
               'Interval',
@@ -3087,10 +3091,13 @@ function genereateSheet(data) {
               'CauseSpecific_Survival_Cum',
               'CauseSpecific_SE_Interval',
               'CauseSpecific_SE_Cum',
-              'Predicted_Int',
-              'Predicted_Cum',
-              'Predicted_Int_SE',
-              'Predicted_Cum_SE'];
+              'Predicted_Survival_Int',
+              'Predicted_ProbDeath_Int',
+              'Predicted_Survival_Cum',
+              'Predicted_Survival_Int_SE',
+              'Predicted_ProbDeath_Int_SE',
+              'Predicted_Survival_Cum_SE',
+            ];
   }
 
   var sheet = [input];
@@ -3136,6 +3143,3 @@ function downloadData(type) {
   XLSX.utils.book_append_sheet(wb, settingsSheet(), 'Settings');
   XLSX.writeFile(wb, wb.props.Title+'.xlsx')
 }
-
-
-
