@@ -668,3 +668,7 @@ tbody tr:last-child td:last-child {
   transform: translate(-50%, -50%);
   width: auto;
 }
+
+.info {
+  background: #d9edf7 !important;
+}
