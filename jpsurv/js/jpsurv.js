@@ -2184,27 +2184,27 @@ function showMessage(id, message, message_type) {
   //console.log(container_id);
 
   if(message_type.toUpperCase() == 'ERROR') {
-    css_class = 'panel-danger';
+    css_class = 'bg-danger text-white';
     header = 'Error';
   } else {
-    css_class = 'panel-warning';
+    css_class = 'bg-warning';
     header = 'Warning';
   }
   $("#"+container_id).empty().show();
   $("#"+container_id).append(
     $('<div>')
-      .addClass('panel')
-      .addClass(css_class)
-      .append(
-        $('<div>')
-          .addClass('panel-heading')
-          .append(header)
+      .addClass('card')
+      .append([
+        $('<div>', {
+          'class': 'card-header ' + css_class,
+          'html': header
+        }),
+        $('<div>', {
+          'class': 'card-body'
+        }).append(
+            $('p').html(message)
           )
-      .append(
-        $('<div>')
-          .addClass('panel-body')
-          .append(message)
-          )
+      ])
     );
 }
 
