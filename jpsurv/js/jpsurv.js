@@ -616,77 +616,85 @@ function addCohortVariables() {
 
         html = '<div class="row"><div class="col-md-12"><fieldset id="cohort-'+i+'" data-cohort="'+key+'"><legend><span class="jpsurv-label">'+key+':</span></legend></fieldset></div></div>';
         $("#cohort-variables").append(html);
-        if(control_data.input_type==undefined)
-        {
-          if(typeof control_data.VarFormatSecList[key].ItemValueInDic == 'string')
-          {
+        if (control_data.input_type==undefined) {
+          if (typeof control_data.VarFormatSecList[key].ItemValueInDic == 'string') {
             $("#cohort-"+0)
-                .append(
-                  $('<div>').addClass('checkbox')
-                    .append($('<label>')
-                      .append($('<input>')
-                          .attr('type', 'checkbox')
-                          .attr('value', control_data.VarFormatSecList[key].ItemValueInDic)
-                          .addClass('cohort')
-                          .addClass('cohort-'+i)
-                        ).append(control_data.VarFormatSecList[key].ItemValueInDic)
-                        .addClass('cohort-'+i)
-                  )
-                );
-          }
-          else{
+              .append(
+                $('<div>').addClass('form-check')
+                  .append([
+                    $('<input>', {
+                      'class': 'form-check-input cohort-'+i,
+                      'id': control_data.VarFormatSecList[key].ItemValueInDic,
+                      'value': control_data.VarFormatSecList[key].ItemValueInDic,
+                      'type': 'checkbox',
+                    }),
+                    $('<label>', {
+                      'class': 'form-check-label cohort-'+i,
+                      'for': control_data.VarFormatSecList[key].ItemValueInDic,
+                      'html': control_data.VarFormatSecList[key].ItemValueInDic,
+                  })
+                ])
+              );
+          } else {
             $.each(control_data.VarFormatSecList[key].ItemValueInDic, function(key2, value2) {
               $("#cohort-"+i)
                 .append(
-                  $('<div>').addClass('checkbox')
-                    .append($('<label>')
-                      .append($('<input>')
-                          .attr('type', 'checkbox')
-                          .attr('value', value2)
-                          .addClass('cohort')
-                          .addClass('cohort-'+i)
-                        ).append(value2)
-                        .addClass('cohort-'+i)
-                  )
+                  $('<div>').addClass('form-check')
+                    .append([
+                      $('<input>', {
+                        'type': 'checkbox',
+                        'value': value2,
+                        'id': value2,
+                        'class': 'form-check-input cohort-'+i,
+                      }),
+                      $('<label>', {
+                        'for': value2,
+                        'class': 'form-check-label cohort-'+i,
+                        'html': value2
+                    })
+                  ])
                 );
             });
           }
-        }
-        else if(control_data.input_type=="csv")
-        {
-          if(typeof  cohort_covariance_variables[key]=='number'|| typeof cohort_covariance_variables[key]=="string")
-          {
+        } else if(control_data.input_type=="csv") {
+          if (typeof cohort_covariance_variables[key]=='number'|| typeof cohort_covariance_variables[key]=="string") {
             $("#cohort-"+i)
               .append(
-                $('<div>').addClass('checkbox')
-                  .append($('<label>')
-                    .append($('<input>')
-                        .attr('type', 'checkbox')
-                        .attr('value', cohort_covariance_variables[key])
-                        .addClass('cohort')
-                        .addClass('cohort-'+i)
-                      ).append(cohort_covariance_variables[key])
-                      .addClass('cohort-'+i)
-                )
+                $('<div>').addClass('form-check')
+                  .append([
+                    $('<input>', {
+                      'class': 'form-check-input cohort-'+i,
+                      'id': cohort_covariance_variables[key],
+                      'value': cohort_covariance_variables[key],
+                      'type': 'checkbox',
+                    }),
+                    $('<label>', {
+                      'class': 'form-check-label cohort-'+i,
+                      'for': cohort_covariance_variables[key],
+                      'html': cohort_covariance_variables[key],
+                  })
+                ])
               );
           }
-
           for(var j=0;j<cohort_covariance_variables[key].length;j++) {
             $("#cohort-"+i)
               .append(
-                $('<div>').addClass('checkbox')
-                  .append($('<label>')
-                    .append($('<input>')
-                        .attr('type', 'checkbox')
-                        .attr('value', cohort_covariance_variables[key][j])
-                        .addClass('cohort')
-                        .addClass('cohort-'+i)
-                      ).append(cohort_covariance_variables[key][j])
-                      .addClass('cohort-'+i)
-                )
+                $('<div>').addClass('form-check')
+                  .append([
+                    $('<input>', {
+                      'class': 'form-check-input cohort-'+i,
+                      'id': cohort_covariance_variables[key][j],
+                      'value': cohort_covariance_variables[key][j],
+                      'type': 'checkbox',
+                    }),
+                    $('<label>', {
+                      'class': 'form-check-label cohort-'+i,
+                      'for': cohort_covariance_variables[key][j],
+                      'html': cohort_covariance_variables[key][j],
+                  })
+                ])
               );
           }
-
         }
         // $("#cohort-"+i).find('input').filter(":first").prop('checked', true);
         i++;
