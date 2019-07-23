@@ -59,10 +59,13 @@
 
   <div id="main" class="container">
     <div class="row">
-      <div class="col-lg-12 col-lg-offset-1 d-none w-100 ml-0" id="jpsurv-message-container">
-        <div class="panel panel-danger">
-          <div class="panel-heading">Error</div>
-          <div class="panel-body" id="jpsurv-message-content-body"></div>
+      <div class="col-lg-12 col-lg-offset-1 w-100 ml-0" id="jpsurv-message-container"
+        style="display:none;">
+        <div class="card">
+          <div class="card-header bg-danger">Error</div>
+          <div class="card-body">
+            <p id="jpsurv-message-content"></p>
+          </div>
         </div>
       </div>
     </div>
@@ -331,7 +334,7 @@
           <div class="row">
             <div class="col-sm-7 col-sm-offset-2" id="jpsurv-help-message-container" style="display:none;margin-top:2%">
               <div class="card">
-                <div class="card-header bg-danger">Error</div>
+                <div class="card-header bg-warning">Warning</div>
                 <div class="card-body">
                   <p id="jpsurv-message-content"></p>
                 </div>
