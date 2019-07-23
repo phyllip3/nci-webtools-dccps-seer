@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" />
   <link rel="stylesheet" href="css/jpsurv.css">
   <link rel="icon" type="image/png" href="images/seer_logo.png">
@@ -38,7 +38,7 @@
   <a class="sr-only sr-only-focusable" title="Skip to content" href="#main">Skip to content</a>
 
   <div class="header">
-    <div class="container" style="padding-left:0;padding-right:0">
+    <div class="container px-0">
       <a href="https://cancercontrol.cancer.gov/" target="DCCPS">
         <img class="img-responsive" src="./images/nci_dccps.svg" id="logo"
           alt="National Cancer Institute: Division of Cancer Control and Population Sciences"
@@ -46,8 +46,8 @@
       </a>
     </div>
     <div id="header" role="banner">
-      <div class="container" style="padding-left:0;padding-right:0">
-        <div id="ribbon" class="clearfix">
+      <div class="container px-0">
+        <div id="ribbon" class="clearfix bg-primary"> 
           <div class="wrapper">
             <h1><a href="/" title="Return to SRP Home">Surveillance Research Program</a></h1>
           </div>
@@ -59,8 +59,7 @@
 
   <div id="main" class="container">
     <div class="row">
-      <div class="col-lg-12 col-lg-offset-1" id="jpsurv-message-container"
-        style="display:none;width:100%;margin-left:0%">
+      <div class="col-lg-12 col-lg-offset-1 d-none w-100 ml-0" id="jpsurv-message-container">
         <div class="panel panel-danger">
           <div class="panel-heading">Error</div>
           <div class="panel-body" id="jpsurv-message-content-body"></div>
@@ -70,7 +69,6 @@
 
 
     <div class="row">
-
       <!-- Upload FORM - STAGE 1 -->
       <div id="slideoutTab" class="col-md-12 col-lg-4">
         <i id="icon" class="fa fa-caret-left fa-2x hidden-xs hidden-sm" onclick="Slide_menu_Horz()"
@@ -83,15 +81,14 @@
                 style="height:60%;width:40%" alt="JPSurv (Joint Point Survival Model)"></img></span>
             <div id="slideout">
               <div class="">
-                <span class="float-right col-md-5 cursor" onclick="openHelpWindow('./html/help.html')"
-                  style="text-align:right">
+                <span class="float-right col-md-5 cursor text-right" onclick="openHelpWindow('./html/help.html')">
                   <a href="#">
-                    <i class="glyphicon glyphicon-question-sign glyphicon-blue" aria-label="Help"></i>
+                    <i class="fas fa-question-circle" aria-label="Help"></i>
                     <span style="font-size:small">Help</span>
                   </a>
                 </span>
                 <!-- Upload FORM - STAGE 1 -->
-                <div class="box col-xs-12" style="overflow:hidden;width:100%">
+                <div class="box col-xs-12 bg-light" style="overflow:hidden;width:100%">
 
                   <form id="upload-form" class="form-horizontal" role="form" method="post" enctype="multipart/form-data"
                     action="jpsurvRest/stage1_upload">
@@ -116,7 +113,7 @@
                       <hr class="stage-separator">
                     </div>
                     <div id="dic_container">
-                      <div id="file_control_container" class="form-group">
+                      <div id="file_control_container" class="mx-0 mb-0"> 
                         <div>
                           <label for='file_control'>SEER Stat Dictionary/Data Files:</label>
                           <a style='font-size:small;color:#3273ab'
@@ -139,11 +136,11 @@
                         </div>
                         <div id="file_display"></div>
                       </div>
-                      <div id="file_data_container" class="form-group"></div>
+                      <div id="file_data_container" class="mx-0 mb-0"></div>
                     </div>
 
                     <div id="csv_container" style="display:none">
-                      <div id="file_control_container_csv" class="form-group">
+                      <div id="file_control_container_csv" class="mx-0 mb-0">
                         <div>
                           <label for='file_control_csv'>CSV File:</label>
                           <a style='font-size:small;color:#3273ab' href='./data/Breast_RelativeSurvival_Head_NA0.csv'
@@ -168,7 +165,7 @@
                       </div>
                     </div>
                     <div id="import_container" style="display:none">
-                      <p style="margin-bottom: .5rem;">All Files imported/exported use the &quot;.jpsurv&quot;extension
+                      <p class="mb-2">All Files imported/exported use the &quot;.jpsurv&quot;extension
                       </p>
                       <div class="input-group mb-2">
                         <div class="custom-file">
@@ -178,11 +175,11 @@
                         </div>
                         <div class="input-group-append">
                           <button class="btn btn-primary" id="upload_file_submit" data-toggle="tooltip"
-                            data-placement="left" type="button" disabled>Upload</button>
+                            data-placement="left" type="button" disabled>Import</button>
                         </div>
                       </div>
                     </div>
-                    <div id="data_type_container" class="form-group"></div>
+                    <div id="data_type_container" class="mx-0 mb-0"></div>
                   </form>
                 </div>
                 <!-- Calculate - STAGE 2 -->
@@ -195,9 +192,9 @@
                       <span class="jpsurv-label">Year of Diagnosis Range:
                         <span>
                           <span class="jpsurv-label-content">
-                            <label for="year_of_diagnosis_start" style="display:none">Start Year</label>
+                            <label for="year_of_diagnosis_start" class="d-none">Start Year</label>
                             <select id='year_of_diagnosis_start' name='year_of_diagnosis_start'></select> to
-                            <label for="year_of_diagnosis_end" style="display:none">End Year</label>
+                            <label for="year_of_diagnosis_end" class="d-none">End Year</label>
                             <select id='year_of_diagnosis_end' name='year_of_diagnosis_end'>
                             </select>
                           </span>
@@ -217,12 +214,12 @@
                     <div id="cohort-variables">
                     </div>
 
-                    <div id="popover" class="form-group jpsurv-label-container" style="display:none;">
+                    <div id="popover" class="mx-0 mb-0 jpsurv-label-container" style="display:none;">
                       <label class="jpsurv-label" for="covariate_select">Covariates:</label>
                       <select id='covariate_select' class="jpsurv-label-content" name='covariate_select'
                         name="selectList"></select>
                     </div>
-                    <div class="form-group jpsurv-label-container">
+                    <div class="mx-0 mb-0 jpsurv-label-container">
                       <label for="max_join_point_select" class="jpsurv-label">Maximum Joinpoints:</label>
                       <select id='max_join_point_select' class="jpsurv-label-content" name='max_join_point_select'>
                         <option>0</option>
@@ -233,13 +230,12 @@
                         <option>5</option>
 
                       </select>
-                      <i class="glyphicon glyphicon-question-sign glyphicon-blue cursor" aria-label="Help"
-                        id='max_help'></i></a>
+                      <i class="fas fa-question-circle" aria-label="Help" id='max_help'></i></a>
                       <div class="row">
                         <div id="e-mail-msg" class="e-mail-grp" style="padding:5px 15px;display:none;">
                         </div>
                       </div>
-                      <div class="form-group e-mail-grp" style="display:none;">
+                      <div class="mx-0 mb-0 e-mail-grp" style="display:none;">
                         <label for="e-mail" class="jpsurv-label" title="Enter a valid e-mail">E-mail:</label>
                         <input class="arrow" tabindex="0" required id="e-mail" type="email"
                           placeholder="Enter e-mail address" title="Enter a valid e-mail address."
@@ -317,9 +313,9 @@
                   </div>
                 </div>
                 <input type='button' id='calculate' value='Calculate'
-                  class="btn btn-primary btn-sm float-right button_group_separator" aria-label="calculate" disabled>
+                  class="btn btn-primary btn-sm float-right mr-3" aria-label="calculate" disabled>
                 <input type='button' onclick="window.location.href='.'" value="Reset"
-                  class="btn btn-secondary btn-sm float-right button_group_separator" title="Reset all values"
+                  class="btn btn-secondary btn-sm float-right mr-3" title="Reset all values"
                   aria-label="Reset">
 
                 <div style="clear:both;"></div>
@@ -331,7 +327,7 @@
         <!-- Main Menu Tabs -->
       </div>
       <div class="card col-md-12 col-lg-8" id="helpCard" style="margin-top:2rem;">
-        <div id="help" class="card-body" style="height: fit-content;">
+        <div id="help" class="card-body h-auto bg-white overflow-auto">
           <div class="row">
             <div class="col-sm-7 col-sm-offset-2" id="jpsurv-help-message-container" style="display:none;margin-top:2%">
               <div class="card">
@@ -707,9 +703,9 @@
       </div>
     </div>
   </div>
-  <footer class="text-left text-md-center pt-4 pb-4 text-light flex-none">
+  <footer class="text-left text-md-center pt-4 pb-4 text-light bg-primary flex-none">
     <div class="container">
-      <ul class="list-inline  text-light">
+      <ul class="list-inline text-light">
         <li class="pb-1 d-block d-md-inline">
           <a class=" text-light m-1" target="_blank" href="https://www.cancer.gov/">Home</a>
         </li>

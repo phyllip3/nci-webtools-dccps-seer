@@ -10,43 +10,8 @@
   margin-bottom: 10px;
   /* font-family:Helvetica; */
 }
-.upload-pane{
-  width: 250px;
-  height:auto;
-}
 
-.parameters-pane{
-  width: 250px;
-  min-height:400px;
-  height:auto;
-  padding:5px;
-}
-.output-pane{
-  vertical-align:top;
-  width:auto;
-  min-width:300px;
-  min-height:400px;
-  height:auto;
-}
 
-.table_title {
-  padding:0px;
-  margin:0px;
-}
-
-#banners {
-    margin-top:15px;
-    height:110px;
-}
-
-.form-horizontal .control-label {
-  padding-top:0px;
-}
-
-.form-horizontal .form-group {
-    margin-left: 0px;
-    margin-right: 0px;
-}
 .form-group {
     margin-bottom: 0px;
 }
@@ -207,18 +172,7 @@ input[type="file"] {
   cursor: pointer;
   margin-right:10px;
 }
-.left_advanced{
-  width:80%;
-}
-.right_advanced{
-  width:20%;
-  display:inline;
-  padding-left:2%;
-  float:right;
-}
-.right_advanced > input {
-  width:45px;
-}
+
 .options_wrapper{
   padding-bottom:15%;
 }
@@ -258,7 +212,7 @@ input[type="file"] {
 .cursor-pointer {
     cursor: pointer;
 }
-.glyphicon-blue {
+.fa-question-circle {
     color: #337ab7;
 }
 #adv-options > div > label {
@@ -320,11 +274,6 @@ input[type="file"] {
   width:250px;
 
 }
-#help {
-  background-color:#FFF;
-  height:519px;
-  overflow:auto;
-}
 
 /* Tooltip */
 div.tooltip-inner {
@@ -382,10 +331,6 @@ div.tooltip-inner {
   background-color: #2A71A5;
 }
 
-.modal-lg {
-    width: 60%;
-}
-
 input[type="radio"] {
     margin-left:10px;
 }
@@ -438,11 +383,6 @@ input[type="radio"] {
 .cursor{
   cursor: pointer
 }
-.help_container{
-  text-align:left;
-  padding-left:0;
-  font-size: 18px
-}
 
 /** Bootstrap button overrides that are WCAG AA compliant  ***/
 .btn-primary {
@@ -468,34 +408,9 @@ fieldset[disabled] .btn-primary.active {
   border-color: #1861ac;
 }
 
-/*
- * Import Export
- */
-
-
-.importContainer_extensionNote {
-    font-weight: bold;
-    text-align: left;
-    display: inline-block;
-    margin-bottom: 4%;
-}
-
-#fileSelect.importContainer_fileSelect {
-    width: 100%;
-}
-
-.button_group_separator {
-    margin-right:10px;
-}
-
-
 /*****************/
 /* ToolTips      */
 /*****************/
-
-.tooltip-arrow {
-    display: none
-}
 
 .tooltip {
   font-size: 10px;
@@ -560,7 +475,6 @@ fieldset[disabled] .btn-primary.active {
 
 footer {
     margin-top: 20px;
-    color: white;
     padding:25px 0;
     background-color: #2A71A5;
 }
@@ -584,38 +498,6 @@ html body footer {
         white-space:normal;
     }
 }
-
-/** Remove styles after migrating to bootstrap 4 */
-/* .d-flex {
-  display: flex;
-}
-
-.align-items-start {
-  align-items: start;
-}
-
-.align-items-center {
-  align-items: center;
-}
-
-.mt-0 {
-  margin-top:0;
-}
-
-.mx-1 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
-.my-5 {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-} */
-
-.mr-5 {
-  margin-right: 5rem;
-}
-
 
 @media(min-width: 1440px){
   .container {
@@ -671,4 +553,8 @@ tbody tr:last-child td:last-child {
 
 .info {
   background: #d9edf7 !important;
+}
+
+.bg-primary {
+  background-color: #2a71a5!important;
 }

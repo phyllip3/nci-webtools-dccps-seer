@@ -382,7 +382,6 @@ function addInputSection() {
 
     }
 
-    $('#upload_file_submit_container').remove();
     $('#calculate').prop("disabled",false);
   }
   else if (status=="failed_upload")
@@ -777,7 +776,6 @@ function checkInputFiles() {
     else if ( $("#importRadioButton").is(":checked")) {
 
         $("#upload_file_submit").attr('title', 'Import Workspace from file');
-        $("#upload_file_submit").text('Import');
 
         if ( $("#fileSelect")[0].files.length == 1 ) {
             $("#upload_file_submit").removeAttr('disabled');
@@ -2059,7 +2057,7 @@ function add_cohort_covariance_variable_select(field, variable_name, variable_ti
   var label = $("<label>")
     .append(label_message)
     .attr('for',variable_name+'_select')
-    .addClass('control-label')
+    .addClass('pt-0')
     .addClass('col-md-6');
 
   field.append($("<DIV class='sub_select'>")
@@ -2652,7 +2650,7 @@ function Read_csv_file(){
 
 
 var template_string='<div class="modal fade" id="modal" tabindex="-1" role="dialog">'
-  +'<div class="modal-dialog  modal-lg" role="document">'
+  +'<div class="modal-dialog w-60" role="document">'
     +'<div class="modal-content" >'
       +'<div class="modal-header">'
         +'<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>'
