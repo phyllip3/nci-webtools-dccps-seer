@@ -1232,7 +1232,21 @@ function calculateTrend() {
 function calculateTrendCallback() {
   var trendData = load_ajax("trend_results-" + jpsurvData.tokenId + ".json");
   if ( trendData != undefined && trendData != null ) {
-    jpsurvData.results.CS_AAPC = trendData.CS_AAPC;
+    // jpsurvData.results.CS_AAPC = trendData.CS_AAPC;
+    jpsurvData.results.CS_AAAC = trendData.CS_AAAC;
+    jpsurvData.results.HAZ_APC = trendData.HAZ_APC;
+    updateTrend(jpsurvData.tokenId);
+    changePrecision();
+    jpsurvData.recentTrends = 1;
+  } else {
+    jpsurvData.recentTrends = 0
+  }
+}
+
+function graphTrendCallback() {
+  var trendData = load_ajax("trend_results-" + jpsurvData.tokenId + ".json");
+  if ( trendData != undefined && trendData != null ) {
+    // jpsurvData.results.CS_AAPC = trendData.CS_AAPC;
     jpsurvData.results.CS_AAAC = trendData.CS_AAAC;
     jpsurvData.results.HAZ_APC = trendData.HAZ_APC;
     updateTrend(jpsurvData.tokenId);
@@ -1596,6 +1610,7 @@ function stage3() {
   $("#year_of_diagnosis_start").val(jpsurvData.calculate.form.yearOfDiagnosisRange[0]);
   getIntervals();
   getAnnotation();
+  getTrendTables();
   delete jpsurvData.results;
 
   calculateAllData();
@@ -3002,6 +3017,19 @@ $(document).click(function (e) {
 // meaning the calculations are done and the panel that contains the calculations is visible.
 function analysisDisplayed() {
     return  ( jpsurvData.stage2completed && $("#right_panel:visible").length == 1) ? true : false
+}
+
+function getTrendTables() {
+  if ($('#showYearTrend').is(':checked')) {
+    $('#yearTrendTable').removeClass('d-none')
+  } else {
+    $('#yearTrendTable').addClass('d-none')
+  }
+  if ($('#showDeathTrend').is(':checked')) {
+    $('#yeardeathTable').removeClass('d-none')
+  } else {
+    $('#yearDeathTable').addClass('d-none')
+  }
 }
 
 // Creates a sheet containing selections for cohorts, model, and advanced options
