@@ -203,7 +203,7 @@
                       </span>
                     </div>
                     <div class="jpsurv-label-container">
-                      <span class="jpsurv-label">Max Intervals from Diagnosis to Include:
+                      <span class="jpsurv-label">Max Intervals:
                         <span>
                           <span class="jpsurv-label-content">
                             <label for="intervals_from_diagnosis" style="display:none">Select</label>
@@ -390,23 +390,27 @@
 
         <div class="card shadow-lg">
           <div class="card-header">
-            <ul id="jpsurv-tabs" class="nav nav-tabs card-header-tabs font-weight-bold">
-              <li class="nav-item">
-                <a class="nav-link active" href="#graph-year-tab" data-toggle="tab">Survival vs. Year at Diagnosis</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href=" #graph-death-tab" data-toggle="tab">Death vs. Year at Diagnosis</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href=" #graph-time-tab" data-toggle="tab">Survival vs. Time Since Diagnosis</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#estimates-tab" data-toggle="tab">Model Estimates</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id="trends-tab-anchor" href="#trends-tab" data-toggle="tab">Trends</a>
-              </li>
-            </ul>
+            <div class="d-flex">
+                <ul id="jpsurv-tabs" class="nav nav-tabs card-header-tabs font-weight-bold">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#graph-year-tab" data-toggle="tab">Survival vs. Year at Diagnosis</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href=" #graph-death-tab" data-toggle="tab">Death vs. Year at Diagnosis</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href=" #graph-time-tab" data-toggle="tab">Survival vs. Time Since Diagnosis</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#estimates-tab" data-toggle="tab">Model Estimates</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="trends-tab-anchor" href="#trends-tab" data-toggle="tab">Trends</a>
+                    </li>
+                  </ul>
+              <a class="full-dataset-link download ml-auto pt-1 pr-2" href="#">Download Full Dataset</a>
+            </div>
+            
           </div>
 
           <!-- TABS HERE -->
@@ -427,10 +431,8 @@
                     </select>
                   </div>
                   <div class="col-lg-5 text-right">
-                    <span>Download Dataset&nbsp;
-                      <a class="download" id="graph-year-dataset-link" href="#">Graph</a>
-                      &nbsp;|&nbsp;
-                      <a class="full-dataset-link download" href="#">Full</a>
+                    <span>
+                      <a class="download" id="graph-year-dataset-link" href="#">Download Graph Dataset</a>
                     </span>
                   </div>
                 </div>
@@ -486,10 +488,8 @@
                     </select>
                   </div>
                   <div class="col-lg-5 text-right">
-                    <span>Download Dataset&nbsp;
-                      <a class="download" id="graph-death-dataset-link" href="#">Graph</a>
-                      &nbsp;|&nbsp;
-                      <a class="full-dataset-link download" href="#">Full</a>
+                    <span>
+                      <a class="download" id="graph-death-dataset-link" href="#">Download Graph Dataset</a>
                     </span>
                   </div>
                 </div>
@@ -543,10 +543,8 @@
                     <button id="recalculate" class="btn btn-primary btn-sm ml-auto" type="button">Recalculate</button>
                   </div>
                   <div class="col-lg-5 text-right">
-                    <span>Download Dataset&nbsp;
-                      <a class="download" id="graph-time-dataset-link" href="#">Graph</a>
-                      &nbsp;|&nbsp;
-                      <a class="full-dataset-link download" href="#">Full</a>
+                    <span>
+                      <a class="download" id="graph-time-dataset-link" href="#">Download Graph Dataset</a>
                     </span>
                   </div>
                 </div>
