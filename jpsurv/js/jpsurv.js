@@ -857,17 +857,20 @@ function updateGraphs(token_id) {
   //Populate graph-year
   $("#graph-year-tab").find( "img" ).show();
   $("#graph-year-tab").find( "img" ).attr("src", "tmp/plot_Year-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
+  $("#graph-year-tab").find( "img" ).css("width","45%");
   $("#graph-year-table > tbody").empty();
   $("#graph-year-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
   //Populate death-year
   $("#graph-death-tab").find( "img" ).show();
   $("#graph-death-tab").find( "img" ).attr("src", "tmp/plot_Death-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
+  $("#graph-death-tab").find( "img" ).css("width","45%");
   $("#graph-death-table > tbody").empty();
   $("#graph-death-table > tbody").append('<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>');
 
   //Populate time-year
   $("#graph-time-tab").find( "img" ).show();
+  $("#graph-time-tab").find( "img" ).css("width","45%");
   $("#graph-time-tab").find( "img" ).attr("src", "tmp/plot_Int-"+token_id+"-"+jpsurvData.results.com+"-"+jpsurvData.results.jpInd+"-"+jpsurvData.results.imageId+".png");
 
   var row;

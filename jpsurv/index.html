@@ -25,7 +25,6 @@
     }
   </style>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" />
@@ -47,7 +46,7 @@
     </div>
     <div id="header" role="banner">
       <div class="container px-0">
-        <div id="ribbon" class="clearfix bg-primary"> 
+        <div id="ribbon" class="clearfix bg-primary">
           <div class="wrapper">
             <h1><a href="/" title="Return to SRP Home">Surveillance Research Program</a></h1>
           </div>
@@ -59,8 +58,7 @@
 
   <div id="main" class="container">
     <div class="row">
-      <div class="col-lg-12 col-lg-offset-1 w-100 ml-0" id="jpsurv-message-container"
-        style="display:none;">
+      <div class="col-lg-12 col-lg-offset-1 w-100 ml-0" id="jpsurv-message-container" style="display:none;">
         <div class="card">
           <div class="card-header bg-danger">Error</div>
           <div class="card-body">
@@ -116,7 +114,7 @@
                       <hr class="stage-separator">
                     </div>
                     <div id="dic_container">
-                      <div id="file_control_container" class="mx-0 mb-0"> 
+                      <div id="file_control_container" class="mx-0 mb-0">
                         <div>
                           <label for='file_control'>SEER Stat Dictionary/Data Files:</label>
                           <a style='font-size:small;color:#3273ab'
@@ -315,11 +313,10 @@
 
                   </div>
                 </div>
-                <input type='button' id='calculate' value='Calculate'
-                  class="btn btn-primary btn-sm float-right mr-3" aria-label="calculate" disabled>
+                <input type='button' id='calculate' value='Calculate' class="btn btn-primary btn-sm float-right mr-3"
+                  aria-label="calculate" disabled>
                 <input type='button' onclick="window.location.href='.'" value="Reset"
-                  class="btn btn-secondary btn-sm float-right mr-3" title="Reset all values"
-                  aria-label="Reset">
+                  class="btn btn-secondary btn-sm float-right mr-3" title="Reset all values" aria-label="Reset">
 
                 <div style="clear:both;"></div>
               </div>
@@ -340,13 +337,13 @@
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
       <div id="right_panel" class="col-md-12 col-lg-8" style="display:none;margin-top:2%">
         <div id="cohort-join-points" class="card shadow-lg mb-4">
           <div class="card-body">
-            <div class="model-select-row">
+            <div class="pb-3">
               <strong>Cohort</strong>&nbsp;
               <select id="cohort-display" aria-label="cohort display"></select>
               <a id="exportButton" data-toggle="tooltip"
@@ -368,7 +365,7 @@
                 <option>9</option>
               </select>
             </div>
-            <div class="table-responsive" style="padding:10px 25px 0px;">
+            <div class="table-responsive">
               <table id="model-selection-table" class="table table-hover table-striped">
                 <thead>
                   <tr>
@@ -390,15 +387,21 @@
         <!-- Message Panel for Error or Warning-->
 
         <div class="card shadow-lg">
-          <div class="card-header border-bottom-0">
-            <ul id="jpsurv-tabs" class="nav nav-tabs card-header-tabs">
+          <div class="card-header">
+            <ul id="jpsurv-tabs" class="nav nav-tabs card-header-tabs font-weight-bold">
               <li class="nav-item">
-                <a class="nav-link active" href="#home" data-toggle="tab">Survival Graph/Data</a>
+                <a class="nav-link active" href="#graph-year-tab" data-toggle="tab">Survival vs. Year at Diagnosis</a>
               </li>
-              <li>
+              <li class="nav-item">
+                <a class="nav-link" href=" #graph-death-tab" data-toggle="tab">Death vs. Year at Diagnosis</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href=" #graph-time-tab" data-toggle="tab">Survival vs. Time Since Diagnosis</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="#estimates-tab" data-toggle="tab">Model Estimates</a>
               </li>
-              <li>
+              <li class="nav-item">
                 <a class="nav-link" id="trends-tab-anchor" href="#trends-tab" data-toggle="tab">Trends</a>
               </li>
             </ul>
@@ -407,183 +410,162 @@
           <!-- TABS HERE -->
           <div class="card-body">
             <div class="tab-content border-0">
-              <!-- Home Tab -->
-              <div class="tab-pane active" id="home">
-                <!-- Sub Tabs for Home -->
-                <ul class="nav nav-tabs font-weight-bold" id="dashboard_tabs">
-                  <li class="nav-item">
-                    <a class="nav-link active" href="#graph-year-tab" data-toggle="tab">Survival vs. Year at
-                      Diagnosis</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href=" #graph-death-tab" data-toggle="tab">Death vs. Year at Diagnosis</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href=" #graph-time-tab" data-toggle="tab">Survival vs. Time Since Diagnosis</a>
-                  </li>
-                </ul>
-                <!-- Sub Graphs here -->
-                <div class="tab-content">
-                  <div id="graph-year-tab" class="tab-pane fade show active">
-                    <div class="row">
-                      <div class="col-lg-7 d-flex align-items-start">
-                        <label for="interval-years" class="mx-1 mr-5">
-                          <strong>Interval Years</strong>
-                        </label>
-                        <select id="interval-years" class="mx-1" multiple>
-                          <option selected>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option selected>4</option>
-                        </select>
-                      </div>
-                      <div class="col-lg-5 text-right">
-                        <span>Download Dataset&nbsp;
-                          <a class="download" id="graph-year-dataset-link" href="#">Graph</a>
-                          &nbsp;|&nbsp;
-                          <a class="full-dataset-link download" href="#">Full</a>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top: 1rem;">
-                      <div class="col-lg-5">
-                        <div style="display: inline-block; margin-right: 2.5rem;">
-                          <label class="mx-1 mr-4" for="yearAnno">Annotate Trends</label>
-                          <input class="checkbox-inline" type="checkbox" id="yearAnno" name="yearAnno">
-                        </div>
-                        <button id="recalculate" class="btn btn-primary btn-sm" type="button">Recalculate</button>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <img class="mx-auto mt-1 w-50 d-block" src="" style="display:none;" alt="graph-year">
-                    </div>
-                    <b><span id="year-tab-rows"
-                        style="display:inline-block;padding-bottom:1%;padding-top:1%"></span></b>
-                    <div class="table-responsive" style="max-height:500px">
-                      <table id="graph-year-table" class="table table-striped table-condensed">
-                        <thead>
-                          <tr>
-                            <th scope="col">Year of Diagnosis 1975</th>
-                            <th scope="col">Interval</th>
-                            <th scope="col">Died</th>
-                            <th scope="col">Alive at Start</th>
-                            <th scope="col">Lost to Followup</th>
-                            <th scope="col">Expected Survival Interval</th>
-                            <th scope="col">Relative Survival Cum</th>
-                            <th scope="col">pred int</th>
-                            <th scope="col">pred cum</th>
-                            <th scope="col">pred int se</th>
-                            <th scope="col">pred cum se</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
+              <!-- Graphs here -->
+              <div id="graph-year-tab" class="tab-pane fade show active">
+                <div class="row">
+                  <div class="col-lg-7 d-flex align-items-start">
+                    <label for="interval-years" class="mx-1 mr-5">
+                      <strong>Interval Years</strong>
+                    </label>
+                    <select id="interval-years" class="mx-1" multiple>
+                      <option selected>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option selected>4</option>
+                    </select>
                   </div>
-
-                  <div id="graph-death-tab" class="tab-pane fade">
-                    <div class="row">
-                      <div class="col-lg-7 d-flex align-items-start ">
-                        <label for="interval-years-death" class="mx-1 mr-5">
-                          <strong>Interval Years</strong>
-                        </label>
-                        <select id="interval-years-death" class="mx-1" multiple="multiple">
-                          <option selected>1</option>
-                          <option>2</option>
-                          <option>3</option>
-                          <option selected>4</option>
-                        </select>
-                      </div>
-                      <div class="col-lg-5 text-right">
-                        <span>Download Dataset&nbsp;
-                          <a class="download" id="graph-death-dataset-link" href="#">Graph</a>
-                          &nbsp;|&nbsp;
-                          <a class="full-dataset-link download" href="#">Full</a>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="row" style="margin-top: 1rem;">
-                      <div class="col-lg-5">
-                        <div style="display: inline-block; margin-right: 2.5rem;">
-                          <label class="mx-1 mr-4" for="deathAnno">Annotate Trends</label>
-                          <input class="checkbox-inline" type="checkbox" id="deathAnno" name="deathAnno">
-                        </div>
-                        <button id="recalculate" class="btn btn-primary btn-sm" type="button">Recalculate</button>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <img class="mx-auto mt-1 w-50 d-block" src="" style="display:none;" alt="graph-death">
-                    </div>
-                    <b><span id="death-tab-rows"
-                        style="display:inline-block;padding-bottom:1%;padding-top:1%"></span></b>
-                    <div class="table-responsive" style="max-height:500px">
-                      <table id="graph-year-table" class="table table-striped table-condensed">
-                        <thead>
-                          <tr>
-                            <th scope="col">Year of Diagnosis 1975</th>
-                            <th scope="col">Interval</th>
-                            <th scope="col">Died</th>
-                            <th scope="col">Alive at Start</th>
-                            <th scope="col">Lost to Followup</th>
-                            <th scope="col">Expected Survival Interval</th>
-                            <th scope="col">Relative Survival Cum</th>
-                            <th scope="col">pred int</th>
-                            <th scope="col">pred cum</th>
-                            <th scope="col">pred int se</th>
-                            <th scope="col">pred cum se</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
+                  <div class="col-lg-5 text-right">
+                    <span>Download Dataset&nbsp;
+                      <a class="download" id="graph-year-dataset-link" href="#">Graph</a>
+                      &nbsp;|&nbsp;
+                      <a class="full-dataset-link download" href="#">Full</a>
+                    </span>
                   </div>
+                </div>
 
-                  <div id="graph-time-tab" class="tab-pane fade">
-                    <div class="row">
-                      <div class="col-lg-7 d-flex align-items-start">
-                        <label for="year-of-diagnosis" class="mx-1 mr-5">
-                          <Strong>Year of Diagnosis</Strong>
-                        </label>
-                        <select id="year-of-diagnosis" class="mx-1" multiple="multiple">
-                          <option selected>1975</option>
-                        </select>
-                        <button id="recalculate" class="btn btn-primary btn-sm ml-auto" type="button">Recalculate</button>
-                      </div>
-                      <div class="col-lg-5 text-right">
-                        <span>Download Dataset&nbsp;
-                          <a class="download" id="graph-time-dataset-link" href="#">Graph</a>
-                          &nbsp;|&nbsp;
-                          <a class="full-dataset-link download" href="#">Full</a>
-                        </span>
-                      </div>
+                <div class="row" style="margin-top: 1rem;">
+                  <div class="col-lg-5">
+                    <div style="display: inline-block; margin-right: 2.5rem;">
+                      <label class="mx-1 mr-4" for="yearAnno">Annotate Trends</label>
+                      <input class="checkbox-inline" type="checkbox" id="yearAnno" name="yearAnno">
                     </div>
-
-                    <div class="row">
-                      <img class="mx-auto mt-1 w-50 d-block" src="" style="display:none;" alt="graph-time">
-                    </div>
-                    <b><span id="time-tab-rows"
-                        style="display:inline-block;padding-bottom:1%;padding-top:1%"></span></b>
-                    <div class="table-responsive">
-                      <table id="graph-time-table" class="table table-striped table-condensed">
-                        <thead>
-                          <tr>
-                            <th scope="col">Year of Diagnosis</th>
-                            <th scope="col">Interval</th>
-                            <th scope="col">Cumulative Relative Survival</th>
-                            <th scope="col">Predicted Cumulative Relative Survival</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
+                    <button id="recalculate" class="btn btn-primary btn-sm" type="button">Recalculate</button>
                   </div>
+                </div>
+
+                <div class="row">
+                  <img class="mx-auto mt-1 d-block" src="" alt="graph-year">
+                </div>
+                <b><span id="year-tab-rows" style="display:inline-block;padding-bottom:1%;padding-top:1%"></span></b>
+                <div class="table-responsive" style="max-height:500px">
+                  <table id="graph-year-table" class="table table-striped table-condensed">
+                    <thead>
+                      <tr>
+                        <th scope="col">Year of Diagnosis 1975</th>
+                        <th scope="col">Interval</th>
+                        <th scope="col">Died</th>
+                        <th scope="col">Alive at Start</th>
+                        <th scope="col">Lost to Followup</th>
+                        <th scope="col">Expected Survival Interval</th>
+                        <th scope="col">Relative Survival Cum</th>
+                        <th scope="col">pred int</th>
+                        <th scope="col">pred cum</th>
+                        <th scope="col">pred int se</th>
+                        <th scope="col">pred cum se</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="graph-death-tab" class="tab-pane fade">
+                <div class="row">
+                  <div class="col-lg-7 d-flex align-items-start ">
+                    <label for="interval-years-death" class="mx-1 mr-5">
+                      <strong>Interval Years</strong>
+                    </label>
+                    <select id="interval-years-death" class="mx-1" multiple="multiple">
+                      <option selected>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option selected>4</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-5 text-right">
+                    <span>Download Dataset&nbsp;
+                      <a class="download" id="graph-death-dataset-link" href="#">Graph</a>
+                      &nbsp;|&nbsp;
+                      <a class="full-dataset-link download" href="#">Full</a>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top: 1rem;">
+                  <div class="col-lg-5">
+                    <div style="display: inline-block; margin-right: 2.5rem;">
+                      <label class="mx-1 mr-4" for="deathAnno">Annotate Trends</label>
+                      <input class="checkbox-inline" type="checkbox" id="deathAnno" name="deathAnno">
+                    </div>
+                    <button id="recalculate" class="btn btn-primary btn-sm" type="button">Recalculate</button>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <img class="mx-auto mt-1 d-block" src="" alt="graph-death">
+                </div>
+                <b><span id="death-tab-rows" style="display:inline-block;padding-bottom:1%;padding-top:1%"></span></b>
+                <div class="table-responsive" style="max-height:500px">
+                  <table id="graph-year-table" class="table table-striped table-condensed">
+                    <thead>
+                      <tr>
+                        <th scope="col">Year of Diagnosis 1975</th>
+                        <th scope="col">Interval</th>
+                        <th scope="col">Died</th>
+                        <th scope="col">Alive at Start</th>
+                        <th scope="col">Lost to Followup</th>
+                        <th scope="col">Expected Survival Interval</th>
+                        <th scope="col">Relative Survival Cum</th>
+                        <th scope="col">pred int</th>
+                        <th scope="col">pred cum</th>
+                        <th scope="col">pred int se</th>
+                        <th scope="col">pred cum se</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="graph-time-tab" class="tab-pane fade">
+                <div class="row">
+                  <div class="col-lg-7 d-flex align-items-start">
+                    <label for="year-of-diagnosis" class="mx-1 mr-5">
+                      <Strong>Year of Diagnosis</Strong>
+                    </label>
+                    <select id="year-of-diagnosis" class="mx-1" multiple="multiple">
+                      <option selected>1975</option>
+                    </select>
+                    <button id="recalculate" class="btn btn-primary btn-sm ml-auto" type="button">Recalculate</button>
+                  </div>
+                  <div class="col-lg-5 text-right">
+                    <span>Download Dataset&nbsp;
+                      <a class="download" id="graph-time-dataset-link" href="#">Graph</a>
+                      &nbsp;|&nbsp;
+                      <a class="full-dataset-link download" href="#">Full</a>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <img class="mx-auto mt-1 d-block" src="" alt="graph-time">
+                </div>
+                <b><span id="time-tab-rows" style="display:inline-block;padding-bottom:1%;padding-top:1%"></span></b>
+                <div class="table-responsive">
+                  <table id="graph-time-table" class="table table-striped table-condensed">
+                    <thead>
+                      <tr>
+                        <th scope="col">Year of Diagnosis</th>
+                        <th scope="col">Interval</th>
+                        <th scope="col">Cumulative Relative Survival</th>
+                        <th scope="col">Predicted Cumulative Relative Survival</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
                 </div>
               </div>
               <!-- Model Estimates Tab -->
@@ -798,13 +780,10 @@
   </div><!-- /.modal -->
   <script src="https://cdn.jsdelivr.net/npm/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-  <!-- <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 
   <script src="js/jpsurv.js"></script>
