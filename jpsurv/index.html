@@ -18,6 +18,15 @@
     src="https://assets.adobedtm.com/f1bfa9f7170c81b1a9a9ecdcc6c5215ee0b03c84/satelliteLib-4b219b82c4737db0e1797b6c511cf10c802c95cb.js"></script>
   <script lang="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/shim.min.js"></script>
   <script lang="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+  <script src="js/jpsurv.js" defer></script>
+  <script src="js/exportImport.js" defer></script>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css">
@@ -141,7 +150,7 @@
                           <label for='file_control_csv'>CSV File:</label>
                           <a style='font-size:small;color:#3273ab' href='./data/Breast_RelativeSurvival_Head_NA0.csv'
                             download='Breast_RelativeSurvival_Head_NA0.csv'>(example)</a>
-                          <button type="button" class="btn btn-outline-light btn-sm float-right" id="Adv_input"
+                          <button type="button" class="btn btn-outline-light btn-sm float-right text-dark" id="Adv_input"
                             disabled>Configure CSV
                           </button>
                         </div>
@@ -551,49 +560,49 @@
                 </div>
 
                 <div id="deathTrendTable" class="d-none mb-4">
-                    <h4>Trend Measures</h4>
-                    <h5>Average Change in the Cumulative Survival by Diagnosis Year*</h5>
-                    <div class="table-responsive">
-                      <table id="trend-aac" class="table table-striped table-condensed">
-                        <thead>
-                          <tr>
-                            <th scope="col">Start Year</th>
-                            <th scope="col">End Year</th>
-                            <th scope="col">Estimate</th>
-                            <th scope="col">Standard Error</th>
-                            <th scope="col">Lower Limit 95% C.I.</th>
-                            <th scope="col">Upper Limit 95% C.I.</th>
-                            <th scope="col">Significance</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div id='footnote'>
-                      <sup>*Numbers represent the difference in cumulative survival rate (as the percent surviving) from
-                        one year at diagnosis to the previous.</sup>
-                    </div>
-  
-                    <h5>Percent Change in the Annual Probability of Dying of Cancer by Diagnosis Year</h5>
-                    <div class="table-responsive">
-                      <table id="trend-dap" class="table table-striped table-condensed">
-                        <thead>
-                          <tr>
-                            <th scope="col">Start Year</th>
-                            <th scope="col">End Year</th>
-                            <th scope="col">Estimate</th>
-                            <th scope="col">Standard Error</th>
-                            <th scope="col">Lower Limit 95% C.I.</th>
-                            <th scope="col">Upper Limit 95% C.I.</th>
-                            <th scope="col">Significance</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                    </div>
+                  <h4>Trend Measures</h4>
+                  <h5>Average Change in the Cumulative Survival by Diagnosis Year*</h5>
+                  <div class="table-responsive">
+                    <table id="trend-aac" class="table table-striped table-condensed">
+                      <thead>
+                        <tr>
+                          <th scope="col">Start Year</th>
+                          <th scope="col">End Year</th>
+                          <th scope="col">Estimate</th>
+                          <th scope="col">Standard Error</th>
+                          <th scope="col">Lower Limit 95% C.I.</th>
+                          <th scope="col">Upper Limit 95% C.I.</th>
+                          <th scope="col">Significance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
                   </div>
+                  <div id='footnote'>
+                    <sup>*Numbers represent the difference in cumulative survival rate (as the percent surviving) from
+                      one year at diagnosis to the previous.</sup>
+                  </div>
+
+                  <h5>Percent Change in the Annual Probability of Dying of Cancer by Diagnosis Year</h5>
+                  <div class="table-responsive">
+                    <table id="trend-dap" class="table table-striped table-condensed">
+                      <thead>
+                        <tr>
+                          <th scope="col">Start Year</th>
+                          <th scope="col">End Year</th>
+                          <th scope="col">Estimate</th>
+                          <th scope="col">Standard Error</th>
+                          <th scope="col">Lower Limit 95% C.I.</th>
+                          <th scope="col">Upper Limit 95% C.I.</th>
+                          <th scope="col">Significance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
                 <div class="row">
                   <img class="mx-auto mt-1 d-block" src="" alt="graph-death">
@@ -869,16 +878,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-  <script src="https://cdn.jsdelivr.net/npm/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 
-  <script src="js/jpsurv.js"></script>
-  <script src="js/exportImport.js"></script>
   <script>_satellite.pageBottom();</script>
 </body>
 
