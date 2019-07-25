@@ -11,10 +11,6 @@
   /* font-family:Helvetica; */
 }
 
-
-.form-group {
-    margin-bottom: 0px;
-}
 .jpsurv-label-container {
    margin-bottom: 5px;
    clear:both;
@@ -116,12 +112,7 @@ input[type="file"] {
   float:right;
   margin-right:66.67%;
 }
-.hide{
- background:#000000;
- z-index:9999999999999999999;
- height:100%;
- width:100%;
-}
+
 
 .fa-caret-right {
     color: #337ab7;
@@ -173,10 +164,6 @@ input[type="file"] {
   margin-right:10px;
 }
 
-.options_wrapper{
-  padding-bottom:15%;
-}
-
 .advanced:hover{
   -webkit-transform: translate(1px, 1px);
   -moz-transform: translate(1px, 1px);
@@ -186,12 +173,6 @@ input[type="file"] {
   text-decoration: underline;
  cursor: pointer;
 
-}
-
-
-#plot-form {
-  margin: 10px;
-  padding-top: 10px;
 }
 
 #cohort-join-points {
@@ -227,9 +208,6 @@ input[type="file"] {
     padding: 2px 2px  !important;
     margin-right:10px;
 }
-.form-inline {
-  padding-bottom: 10px;
-}
 
 .model-number {
   white-space:nowrap;
@@ -256,11 +234,6 @@ input[type="file"] {
     margin-left: -20px;
     margin-right:10px;
     position: static;
-}
-
-.checkbox label {
-    padding-left:25px;
-    padding-right:5px;
 }
 
 #cohort-variables > div {
@@ -329,10 +302,6 @@ div.tooltip-inner {
 
 #header {
   background-color: #2A71A5;
-}
-
-input[type="radio"] {
-    margin-left:10px;
 }
 
 #data_table_wrapper th {
@@ -450,7 +419,7 @@ fieldset[disabled] .btn-primary.active {
     padding-left:0;
     white-space:nowrap;
 }
-
+/* 
 #dic {
     white-space: nowrap;
     margin-left:0;
@@ -465,7 +434,7 @@ fieldset[disabled] .btn-primary.active {
 #importRadioButton {
     margin-left: 0;
     margin-top: 0;
-}
+} */
 
 #selected-interval-years, #selected-interval-years-death {
     margin-left: 5px;
@@ -505,11 +474,6 @@ html body footer {
     }
   }
 
-/* Download links */
-.download {
-  font-weight: bold;
-}
-
 /* Fixed table header */
 .table thead th {
   position: sticky;
@@ -535,11 +499,6 @@ tbody tr:last-child td:first-child {
 tbody tr:last-child td:last-child {
   border-bottom-right-radius: 8px;
 }
-
-/* Fix overlap with recalculate button */
-.col-lg-7 .col-lg-1 {
-  z-index: 10;
-}  
 
 /* position modal center */
 #calculating-spinner .modal-dialog {

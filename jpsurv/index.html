@@ -74,7 +74,7 @@
       <div id="slideoutTab" class="col-md-12 col-lg-4">
         <i id="icon" class="fa fa-caret-left fa-2x hidden-xs hidden-sm" onclick="Slide_menu_Horz()"
           style="visibility: hidden;margin-left:100%"></i>
-        <div id="slideoutForm" class="card">
+        <div id="slideoutForm" class="card shadow-lg">
           <div class="card-body">
             <span class="jpsurv-title col-md-6 d-none d-sm-block d-md-block"><img src="./images/jpsurv.png"
                 style="height:60%;width:60%" alt="JPSurv (Joint Point Survival Model)"></img></span>
@@ -245,7 +245,7 @@
                           aria-label="Email Address">
                       </div>
                       <div class="row">
-                        <div id="Advanced_toogle" class="advanced ml-auto mr-3"
+                        <div class="advanced ml-auto mr-3"
                           onclick="Slide_menu_Vert('stage2b-advanced','both')">
                           Advanced Options
                         </div>
@@ -279,7 +279,7 @@
 
                     </div>
                     <!-- Skipped Observations between (adv-between)-->
-                    <div class="row form-inline">
+                    <div class="row form-inline pb-3">
                       <label for="adv-between" class="mr-auto">Minimum Number of Years between Joinpoints (Excluding
                         Joinpoints): </label>
                       <input id="adv-between" type="number" class="form-control ml-auto sm-input" value="2" min="2"
@@ -287,7 +287,7 @@
                     </div>
 
                     <!-- Skipped Obervations from First (adv-first) -->
-                    <div class="row form-inline">
+                    <div class="row form-inline pb-3">
                       <label for="adv-first" class="mr-auto">Minimum Number of Years before First Joinpoint
                         (Excluding
                         Joinpoint): </label>
@@ -296,14 +296,14 @@
                     </div>
 
                     <!-- Skipped Obervations to Last (adv-last) -->
-                    <div class="row form-inline">
+                    <div class="row form-inline pb-3">
                       <label for="adv-last" class="mr-auto">Minimum Number of Years after Last Joinpoint (Excluding
                         Joinpoint): </label>
                       <input id="adv-last" type="number" class="form-control ml-auto sm-input" value="5" min="2"
                         aria-label="adv-last" />
                     </div>
                     <!-- Number of Calendar Year of Project (adv-year) -->
-                    <div class="row form-inline">
+                    <div class="row form-inline pb-3">
                       <label for="adv-year" class="mr-auto">Number of Calendar Years of Projected Survival:</label>
                       <input id="adv-year" type="number" class="form-control ml-auto sm-input" value="5" min="0"
                         required aria-label="adv-year" />
@@ -328,7 +328,7 @@
         <!-- </form> -->
         <!-- Main Menu Tabs -->
       </div>
-      <div class="card col-md-12 col-lg-8" id="helpCard" style="margin-top:2rem;">
+      <div class="card col-md-12 col-lg-8 shadow-lg" id="helpCard" style="margin-top:2rem;">
         <div id="help" class="card-body h-auto bg-white overflow-auto">
           <div class="row">
             <div class="col-sm-7 col-sm-offset-2" id="jpsurv-help-message-container" style="display:none;margin-top:2%">
@@ -383,7 +383,7 @@
                 </tbody>
               </table>
             </div>
-            <a class="full-dataset-link download float-right" href="#">Download Full Dataset</a>
+            <a class="full-dataset-link font-weight-bold float-right" href="#">Download Full Dataset</a>
           </div>
         </div>
 
@@ -431,7 +431,7 @@
                   </div>
                   <div class="col-lg-5 text-right">
                     <span>
-                      <a class="download" id="graph-year-dataset-link" href="#">Download Graph Dataset</a>
+                      <a class="font-weight-bold" id="graph-year-dataset-link" href="#">Download Graph Dataset</a>
                     </span>
                   </div>
                 </div>
@@ -537,7 +537,7 @@
                   </div>
                   <div class="col-lg-5 text-right">
                     <span>
-                      <a class="download" id="graph-death-dataset-link" href="#">Download Graph Dataset</a>
+                      <a class="font-weight-bold" id="graph-death-dataset-link" href="#">Download Graph Dataset</a>
                     </span>
                   </div>
                 </div>
@@ -631,7 +631,7 @@
               <div id="graph-time-tab" class="tab-pane fade">
                 <div class="row">
                   <div class="col-lg-7 d-flex align-items-start">
-                    <label for="year-of-diagnosis" class="mx-1 mr-5">
+                    <label for="year-of-diagnosis" class="mx-1 mr-3">
                       <Strong>Year of Diagnosis</Strong>
                     </label>
                     <select id="year-of-diagnosis" class="mx-1" multiple="multiple">
@@ -641,7 +641,7 @@
                   </div>
                   <div class="col-lg-5 text-right">
                     <span>
-                      <a class="download" id="graph-time-dataset-link" href="#">Download Graph Dataset</a>
+                      <a class="font-weight-bold" id="graph-time-dataset-link" href="#">Download Graph Dataset</a>
                     </span>
                   </div>
                 </div>
