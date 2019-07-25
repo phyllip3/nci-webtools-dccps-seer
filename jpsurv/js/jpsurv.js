@@ -207,11 +207,6 @@ function addEventListeners() {
   $("#covariate_select").on("change", change_covariate_select);
   $("#precision").on("change", userChangePrecision);
 
-  //$("#upload_file_submit").click(function(event) {
-  //  setEventHandlerForImports()
-  //  file_submit(event);
-  //});
-
   // recalculate button
   Array.prototype.map.call(document.querySelectorAll("#recalculate"), function(link) {
     link.onclick = function(event) {
@@ -255,10 +250,8 @@ function addEventListeners() {
 
 /* The Original Code for submitting the a (Dictionary/Data Files) and CSV */
 function submitDicOrCsv(event) {
-  //$("#upload_file_submit").click(function(event) {
     setEventHandlerForImports()
     file_submit(event);
-  //});
 }
 
 function userChangePrecision() {
@@ -357,7 +350,7 @@ function addInputSection() {
       );
       $("#input_type_select").remove();
       $("#upload-form #seperator").remove();
-      $("#upload_file_submit").remove();
+      $(".upload_file_submit").remove();
       $( "#has_headers" ).remove();
       $("#csv_label_data").remove();
       $("#csv_label_headers").remove();
@@ -729,8 +722,6 @@ function checkInputFiles() {
       var error_msg="Please choose 1 dictionary file and one text file"
       $("#file_display").empty();
 
-      // $("#upload_file_submit").text('Upload Input Files');
-
       if($("#file_control").prop("files").length>2)
         $("#file_display").html('<span style="color:red">'+error_msg+'</span></br>');
       else{
@@ -750,37 +741,25 @@ function checkInputFiles() {
         }
       }
       var numberOfFiles = $("#file_control").prop("files").length
-      if(numberOfFiles == 2 && has_dic==true &&  has_txt==true) {
-        $("#upload_file_submit").removeAttr('disabled');
-        $("#upload_file_submit").on("click", submitDicOrCsv)
+      if (numberOfFiles == 2 && has_dic==true &&  has_txt==true) {
+        $("#upload_dictxt").removeAttr('disabled');
+        $("#upload_dictxt").on("click", submitDicOrCsv)
       } else if (numberOfFiles == 1) {
         $("#file_display").html('<span style="color:red">'+error_msg+'</span></br>');
       }
-
-    }
-
-    else if($('#csv').is(':checked')){
-
-      $("#upload_file_submit").attr('title', 'Upload Data from CSV File');
-
+    } else if($('#csv').is(':checked')) {
+      $("#upload_csv").attr('title', 'Upload Data from CSV File');
       if(file_control_csv.length > 0 &&jpsurvData.passed==true) {
-        $("#upload_file_submit").removeAttr('disabled');
-
-        $("#upload_file_submit").on("click", submitDicOrCsv)
-
+        $("#upload_csv").removeAttr('disabled');
+        $("#upload_csv").on("click", submitDicOrCsv)
+      } else {
+        $("#upload_csv").prop('disabled', true);
       }
-      else{
-        $("#upload_file_submit").prop('disabled', true);
-      }
-    }
-    else if ( $("#importRadioButton").is(":checked")) {
-
-        $("#upload_file_submit").attr('title', 'Import Workspace from file');
-
+    } else if ( $("#importRadioButton").is(":checked")) {
+        $("#upload_session").attr('title', 'Import Workspace from file');
         if ( $("#fileSelect")[0].files.length == 1 ) {
-            $("#upload_file_submit").removeAttr('disabled');
-            $("#upload_file_submit").off("click", "#upload_file_submit", submitDicOrCsv)
-            $("#upload_file_submit").on("click", importBackEnd)
+            $("#upload_session").prop("disabled", false);
+            $("#upload_session").on("click", importBackEnd);
         }
     }
 }
@@ -2609,7 +2588,7 @@ $( "#csv" ).click(function() {
   $("#dic_container").hide();
   $("#import_container").hide()
   $("#csv_container").show();
-  $('#upload_file_submit').prop("disabled",true);
+  $('#upload_csv').prop("disabled",true);
   checkInputFiles();
 
 });
@@ -2619,7 +2598,7 @@ $( "#dic" ).click(function() {
   $("#csv_container").hide();
   $("#import_container").hide()
   $("#dic_container").show();
-    $('#upload_file_submit').prop("disabled",true);
+  $('#upload_dictxt').prop("disabled",true);
 
   checkInputFiles();
 
