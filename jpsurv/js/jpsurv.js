@@ -308,6 +308,7 @@ function addInputSection() {
           .addClass('jpsurv-label-content')
         )
       );
+      $('#inputTypeLabel').remove();
       $( "#input_type_select" ).remove();
       $(" #upload-form #seperator").remove();
       $(" #input_type")

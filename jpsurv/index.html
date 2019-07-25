@@ -97,21 +97,21 @@
 
                   <form id="upload-form" class="form-horizontal" role="form" method="post" enctype="multipart/form-data"
                     action="jpsurvRest/stage1_upload">
-
-                    <div id="input_type_select" style="margin-bottom:2%" class="row row-no-gutters">
-                      <label class="col-xs-3">File Format:</label>
-                      <div id="dic_section" class="file_format_selection_section col-xs-3 ml-2">
-                        <input type="radio" name="data" value="dic" checked id="dic"
-                          aria-label="dictionary"><span>&nbsp;Dic/Data Files</span>
+                    <label class="col-xs-3" id="inputTypeLabel">File Format:</label>
+                    <div id="input_type_select" style="margin-bottom:2%" class="d-flex">
+                      <div class="custom-control custom-radio custom-control-inline" id="dic_section">
+                        <input type="radio" id="dic" name="data" value="dic" class="custom-control-input" checked>
+                        <label class="custom-control-label" for="dic" aria-label="dictionary">Dic/Data Files</label>
                       </div>
-                      <div id="csv_section" class="file_format_selection_section col-xs-3 ml-2">
-                        <input type="radio" id="csv" name="data" value="csv" aria-label="csv"><span>&nbsp;CSV
-                          Files</span>
+                      <div class="custom-control custom-radio custom-control-inline" id="csv_section">
+                        <input type="radio" id="csv" name="data" value="csv" class="custom-control-input">
+                        <label class="custom-control-label" for="csv" aria-label="csv">CSV Files</label>
                       </div>
-                      <div id="import_section" class="file_format_selection_section col-xs-3 ml-2">
+                      <div class="custom-control custom-radio custom-control-inline" id="import_section">
                         <input type="radio" id="importRadioButton" name="data" value="importRadioButton"
-                          aria-label="importRadioButton">
-                        <span>&nbsp;Workspace</span>
+                          class="custom-control-input">
+                        <label class="custom-control-label" for="importRadioButton"
+                          aria-label="importRadioButton">Workspace</label>
                       </div>
                     </div>
                     <div id="seperator" class="row row-no-gutters">
@@ -150,8 +150,8 @@
                           <label for='file_control_csv'>CSV File:</label>
                           <a style='font-size:small;color:#3273ab' href='./data/Breast_RelativeSurvival_Head_NA0.csv'
                             download='Breast_RelativeSurvival_Head_NA0.csv'>(example)</a>
-                          <button type="button" class="btn btn-outline-light btn-sm float-right text-dark" id="Adv_input"
-                            disabled>Configure CSV
+                          <button type="button" class="btn btn-outline-light btn-sm float-right text-dark"
+                            id="Adv_input" disabled>Configure CSV
                           </button>
                         </div>
 
