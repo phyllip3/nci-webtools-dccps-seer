@@ -613,16 +613,16 @@ function addCohortVariables() {
           if (typeof control_data.VarFormatSecList[key].ItemValueInDic == 'string') {
             $("#cohort-"+0)
               .append(
-                $('<div>').addClass('form-check')
+                $('<div>').addClass('custom-control custom-checkbox')
                   .append([
                     $('<input>', {
-                      'class': 'form-check-input cohort-'+i,
+                      'class': 'custom-control-input cohort-'+i,
                       'id': control_data.VarFormatSecList[key].ItemValueInDic,
                       'value': control_data.VarFormatSecList[key].ItemValueInDic,
                       'type': 'checkbox',
                     }),
                     $('<label>', {
-                      'class': 'form-check-label cohort-'+i,
+                      'class': 'custom-control-label cohort-'+i,
                       'for': control_data.VarFormatSecList[key].ItemValueInDic,
                       'html': control_data.VarFormatSecList[key].ItemValueInDic,
                   })
@@ -632,17 +632,17 @@ function addCohortVariables() {
             $.each(control_data.VarFormatSecList[key].ItemValueInDic, function(key2, value2) {
               $("#cohort-"+i)
                 .append(
-                  $('<div>').addClass('form-check')
+                  $('<div>').addClass('custom-control custom-checkbox')
                     .append([
                       $('<input>', {
                         'type': 'checkbox',
                         'value': value2,
                         'id': value2,
-                        'class': 'form-check-input cohort-'+i,
+                        'class': 'custom-control-input cohort-'+i,
                       }),
                       $('<label>', {
                         'for': value2,
-                        'class': 'form-check-label cohort-'+i,
+                        'class': 'custom-control-label cohort-'+i,
                         'html': value2
                     })
                   ])
@@ -653,16 +653,16 @@ function addCohortVariables() {
           if (typeof cohort_covariance_variables[key]=='number'|| typeof cohort_covariance_variables[key]=="string") {
             $("#cohort-"+i)
               .append(
-                $('<div>').addClass('form-check')
+                $('<div>').addClass('custom-control custom-checkbox')
                   .append([
                     $('<input>', {
-                      'class': 'form-check-input cohort-'+i,
+                      'class': 'custom-control-input cohort-'+i,
                       'id': cohort_covariance_variables[key],
                       'value': cohort_covariance_variables[key],
                       'type': 'checkbox',
                     }),
                     $('<label>', {
-                      'class': 'form-check-label cohort-'+i,
+                      'class': 'custom-control-label cohort-'+i,
                       'for': cohort_covariance_variables[key],
                       'html': cohort_covariance_variables[key],
                   })
@@ -672,16 +672,16 @@ function addCohortVariables() {
           for(var j=0;j<cohort_covariance_variables[key].length;j++) {
             $("#cohort-"+i)
               .append(
-                $('<div>').addClass('form-check')
+                $('<div>').addClass('custom-control custom-checkbox')
                   .append([
                     $('<input>', {
-                      'class': 'form-check-input cohort-'+i,
+                      'class': 'custom-control-input cohort-'+i,
                       'id': cohort_covariance_variables[key][j],
                       'value': cohort_covariance_variables[key][j],
                       'type': 'checkbox',
                     }),
                     $('<label>', {
-                      'class': 'form-check-label cohort-'+i,
+                      'class': 'custom-control-label cohort-'+i,
                       'for': cohort_covariance_variables[key][j],
                       'html': cohort_covariance_variables[key][j],
                   })
